@@ -9,7 +9,7 @@ Windows desktop app (Rust, Tauri 2) to manage WSL containers (WSLC). Status: pla
 
 ## Start here
 - [[ba-analysis]]: analysis, architecture, risks, phasing
-- [[decision-log]]: D1 to D17 in one place
+- [[decision-log]]: D1 to D18 in one place
 - [[unverified-items]]: what is still not proven
 - [[qa/README|QA]]: test strategy, integration convention, definition of done
 - [[pm/roadmap|Roadmap]]: estimates and critical path
