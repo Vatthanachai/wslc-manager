@@ -46,9 +46,18 @@ npm 12 blocking install scripts (esbuild) · Tauri crate compiling on the runner
 - [x] T7 `branch-policy.yml` (job `branch-policy`): passes for head `develop`, `release/*`, `hotfix/*` into `main`; fails with a message naming them for any other head into `main`; passes or is skipped for PRs into `develop`; injection-safe. Test the shell logic locally with a small table of branch names (including odd characters and long names). (C)
 - [x] T8 README "Local checks" + integration-test instructions; link the QA documents. (D, A)
 - [x] T9 Run all local checks (`cargo fmt --check`, clippy, `cargo test --workspace`, `npm ci && npm run build && npm test`) and report real output. Commit in small conventional commits ending with the Co-Authored-By line. Do not push.
-- [ ] T10 (main assistant) push the feature branch, confirm the CI run is green, run the five deliberate-failure probes and the branch-policy probes, record job names in the ticket, delete probe branches.
+- [x] T10 (main assistant) push the feature branch, confirm the CI run is green, run the five deliberate-failure probes and the branch-policy probes, record job names in the ticket, delete probe branches.
 - [ ] T11 (`tester`) verify against the ticket's criteria and the QA Definition of Done; report in `obsidians/plans/REQ-013-test-report.md`.
 - [ ] T12 (owner, separate step) after both jobs ran green at least once: decide whether to add `ci-check` and `branch-policy` as required status checks on ruleset 27014559 and record it in [[decision-log]].
 
 ## Definition of done
 Ticket acceptance criteria A to D met or explicitly marked pending; `tester` verdict pass; QA Definition of Done ([[qa/README|obsidians/qa/]]) satisfied; CI green on the feature branch; no personal data in workflow files or docs; PR-only rule for `main` respected (D16).
+
+## T10 results (GitHub, 2026-11-11)
+
+- First run on `0cf462d` FAILED at `cargo clippy`: the runner has Rust 1.99, whose clippy adds `chunks_exact_to_as_chunks`; local Rust is 1.97. Fixed in `3f861d3` (`.chunks(2).filter(len == 2)`; `as_chunks` was not used because the workspace declares `rust-version = 1.80`). The second run on `3f861d3` passed every step (`ci-check`, success). Lesson: the Rust toolchain is not pinned, so CI and local can diverge. Decision pending: pin it with `rust-toolchain.toml` (owner).
+- Status-check names reported by GitHub (these are the strings to use in the ruleset): `ci-check` and `branch-policy`.
+- Deliberate-failure probes on throwaway branches, each failed at the matching step: failing Rust test -> `cargo test`; clippy warning -> `cargo clippy`; formatting difference -> `cargo fmt --check`; failing Vitest test -> `npm test`; TypeScript error -> `npm run build`. Probe branches and PRs were deleted/closed unmerged.
+- `branch-policy` probes through real PRs: feature -> `main` FAILED with the message "Pull requests into main must come from develop, release/* or hotfix/*."; feature -> `develop` passed; `release/*` -> `main` passed.
+- Caveat found: when two PRs share the same head SHA (e.g. one into `develop` and one into `main`), the check runs of both land on the same commit and both show in each PR's status rollup (one FAILURE, one SUCCESS). GitHub's required-check evaluation for such a case depends on which run is latest, so a passing run could mask a failing one. The risk only exists for a head branch with PRs into both bases, which git flow does not normally do (feature -> `develop` only; `develop`/`release/*`/`hotfix/*` -> `main`). Mitigation if it matters: never open a PR into `main` from a `feature/*` branch (the check is meant to prevent it) and keep the rule as a guard, not a security boundary.
+- Cache: first run built from cold; second run time not compared here [U].
