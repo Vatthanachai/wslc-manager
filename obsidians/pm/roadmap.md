@@ -1,5 +1,5 @@
 ---
-status: draft-v1
+status: draft-v2
 updated: 2026-11-11
 tags: [pm]
 ---
@@ -21,8 +21,14 @@ Every input is labelled **measured** (from this session, git or a report), **ass
 | Git calendar data | all 9 commits on 2026-11-11, 14:25 to 14:41 (+0700). Several commits share one timestamp, so commit time is not run time | measured |
 | Agent time for features other than REQ-000 | derived from the single REQ-000 data point, scaled by judgement (see section 4) | assumed |
 | Human review and decision hours | ranges per stage in section 4 | assumed (no measurement exists) |
-| Owner weekly available hours | unknown | open question Q1 |
-| SignPath turnaround, WSL version availability, hardware for manual checks | unknown | open questions |
+| Owner weekly review capacity | 10 hours per week | stated by owner, 2026-11-11 |
+| REQ-000 status | done, merged into `develop`, tester verdict pass after the BUG-001 fix | stated by owner, 2026-11-11 |
+| BUG-001 fix by dev | 0.5 min (28 s) | measured |
+| Tester re-verification after the fix | about 0.9 min (55 s) | measured |
+| UX batching (shell and states; main screen; dialogs and banners; log viewer) | accepted | stated by owner, 2026-11-11 |
+| Development mode | sequential, no parallel worktrees for now | stated by owner, 2026-11-11 |
+| `develop` and `main` pushed to the GitHub remote; repo public yet? | pushed, public not confirmed | stated by owner, 2026-11-11 (public: open) |
+| Target dates, second machine or VM, other WSL versions, SignPath roles and turnaround, REQ-003 split | unknown | open questions |
 
 One feature is not a trend. All ranges below are wide, confidence is low to medium, and the agent-time ranges assume the stack stays the same. The human time dominates, as expected for this setup: the whole agent chain for a ticket is under about 1.5 hours of wall-clock, while owner review and decisions add several hours of attention and, if the owner is only available a few hours a week, days of waiting.
 
@@ -30,7 +36,7 @@ One feature is not a trend. All ranges below are wide, confidence is low to medi
 
 | Milestone | Tickets | Gate | Rough size (assumed) |
 |---|---|---|---|
-| M0 Foundation (done, pending finish) | [[REQ-000-walking-skeleton]] | BUG-001 fixed, owner review, `git flow feature finish` | 0.5 to 1 h owner, minutes of agent time |
+| M0 Foundation (DONE, merged into `develop`, stated by owner 2026-11-11) | [[REQ-000-walking-skeleton]] | BUG-001 fixed and re-verified, finished | dev 6.5 + tester 3.1 + fix 0.5 + retest 0.9 = about 11 min agent time (measured) |
 | M1 MVP, Phase 1 | [[REQ-001-discover-runtimes]], [[REQ-002-detect-engine]], [[REQ-008-error-handling]], [[REQ-003-list-containers]], [[REQ-004-container-lifecycle]], [[REQ-007-safe-destructive-actions]], [[REQ-006-live-updates]], [[REQ-005-container-logs]], [[REQ-009-wsl-update-check]] | all Must tickets finished on `develop`, manual run on a real WSLC machine | 9 to 19 h owner review plus 3 to 6 h of spike and manual checks, 5 to 12 h of agent chain (assumed) |
 | M2 Release gate | [[REQ-012-release-and-signing-pipeline]] | unsigned public release out, then SignPath decision | 2 to 5 h owner plus unknown external wait |
 | M3 Later (Phase 2) | [[REQ-010-sessions-panel]], [[REQ-011-container-stats]], then Docker phase (not ticketed) | Should items | 1.5 to 3.5 h owner |
@@ -67,7 +73,7 @@ Time columns: agent = wall-clock of agent runs for the stages, summed for the ti
 
 | Ticket | Depends on | Agent time (opt / likely / pess) | Human review (h, range) | Calendar wait | Confidence | Main risk |
 |---|---|---|---|---|---|---|
-| [[REQ-000-walking-skeleton]] | none | done: dev 6.5 min + tester 3.1 min measured; fix about 3 to 8 min | 0.5 to 1 | none | high | BUG-001 fix not yet verified |
+| [[REQ-000-walking-skeleton]] | none | DONE: dev 6.5 + tester 3.1 + fix 0.5 + retest 0.9 min (measured) | not recorded | none | high | none, merged |
 | [[REQ-001-discover-runtimes]] | REQ-000 | 25 / 40 / 70 min | 1.0 to 2.0 | none | medium | UTF-16LE decoding, text-table session parser, [U] 0 or 2+ sessions format, wslc-missing state not testable |
 | [[REQ-002-detect-engine]] | REQ-001 | 15 / 25 / 45 min | 0.5 to 1.0 | none | medium | version gates from source reading [R], floor version [U] |
 | [[REQ-008-error-handling]] | REQ-001 | 25 / 45 / 80 min | 1.0 to 2.0 | none | medium | refined throughout, cross-cutting; [U] failure cases (collision, port in use, kill) |
@@ -88,62 +94,69 @@ Totals (assumed, sum of the rows above, not a forecast of dates):
 
 ## 5. Translating owner hours into calendar time
 
-The conversion depends on the owner's weekly hours (unknown, Q1). Illustration only, MVP remaining 13 to 25 h of owner time (review plus spikes, before rework allowance), agent chains add under half a day:
+Weekly capacity is **10 h per week (stated by owner, 2026-11-11)**. The owner hours below are still **assumed** (not measured), so the result is arithmetic on stated capacity and assumed effort, not a forecast date. No calendar dates are given.
 
-| Owner hours per week (hypothetical) | MVP calendar span (weeks) | Note |
+| Step | Owner hours | Source |
 |---|---|---|
-| 5 | about 3 to 5 | review-bound |
-| 10 | about 1.5 to 2.5 | |
-| 20 | about 1 to 1.5 | bounded by serial dependencies and agent latency, not by hours |
+| Review of REQ-001 to 009 (UX batches, plan checks, test sign-off) | 9.3 to 18.5 | assumed, section 4 |
+| Spikes and manual checks (S1 to S5, about 2 to 3 h; plus S7 and S6 desk read) | 3 to 6 | assumed, section 7 |
+| Subtotal | 12.3 to 24.5 | arithmetic |
+| With rework allowance x1.2 to x1.5 | 14.8 to 36.8 | guessed factor |
 
-These rows are arithmetic on an assumed 13 to 25 h, not evidence. Replace with real figures once Q1 is answered and the first 3 tickets have recorded actuals in [[actuals]].
+Conversion at 10 h/week:
+- Without rework: 12.3 / 10 to 24.5 / 10 = about 1.2 to 2.5 weeks.
+- With rework: 14.8 / 10 to 36.8 / 10 = about 1.5 to 3.7 weeks.
+- Sequential dev adds agent latency: 4.6 to 12.7 h of agent wall-clock (x rework 5.5 to 19 h) for 001 to 009, one ticket at a time. Agent runs overlap the owner's session when the owner triggers them, so I assume most of it is hidden inside the owner's hours, and add 0.5 to 1 week of slack for the part that is not.
+- **MVP (001 to 009) duration: about 1.5 to 4 weeks, likely about 2 to 3 weeks. Confidence: low to medium.** The upper end is mostly rework risk on REQ-003, 007, 009, plus spikes surprises.
+- After the MVP: REQ-010 and 011 add 1.5 to 3.5 h (about 0.2 to 0.4 week). REQ-012 adds 2 to 5 h (about 0.2 to 0.5 week) of owner time plus the SignPath wait, which is unknown and not included.
+
+Capacity check: 10 h/week means about 1 to 2 tickets can finish per week at the likely hours of 1 to 3 h per ticket. Sequential dev with 4 UX review batches fits that cadence. Re-do this table after REQ-001 and REQ-002 have measured actuals in [[actuals]].
 
 ## 6. Critical path, parallelism
 
-Critical path to MVP (by dependencies): REQ-000 -> REQ-001 -> {REQ-002 and REQ-008} -> REQ-003 -> REQ-004 -> REQ-007. REQ-005 and REQ-006 hang off REQ-003 and are as long as REQ-004 plus REQ-007 only if serialised. REQ-009 is off the path (needs only 001 and 002).
+Status: REQ-000 is done and merged into `develop` (stated by owner, 2026-11-11). Development is **sequential** (stated by owner), so every remaining ticket is effectively on the critical path and the path is the whole serial order:
+
+REQ-001 -> REQ-002 -> REQ-008 -> REQ-003 -> REQ-004 -> REQ-007 -> REQ-006 -> REQ-005 -> REQ-009 (MVP complete) -> REQ-012 -> REQ-011 -> REQ-010.
+
+Dependency-wise REQ-005, 006 and 009 are off the longest chain, so under sequential dev the order among them is free. Suggested: put REQ-009 early if S3 shows a problem (it carries the most uncertainty), otherwise last. Spikes S1 to S5 go before REQ-001 so the fixtures exist when needed.
 
 Critical path to a signed release: MVP complete -> REQ-012 unsigned release -> SignPath application -> external wait (unknown) -> first signed release. The external wait is the least predictable item in the whole plan, so request the SignPath application the moment a first release exists, and start the repo hygiene and CI part of REQ-012 early (it only needs REQ-000, so it can overlap the MVP).
 
 Because owner review is the bottleneck, the owner (not the agents) is usually the critical resource. The better lever is batching reviews, not parallel agents.
 
-### What can run in parallel
-- REQ-002 || REQ-008 after REQ-001 (different concerns, but both touch the error/domain crates: merge conflicts likely, use separate worktrees).
-- REQ-004 || REQ-005 || REQ-006 || REQ-009 once REQ-003 is merged (REQ-009 only needs REQ-001/002 and could even start earlier).
-- REQ-012 repo hygiene, CI workflow, README, LICENSE check || any MVP ticket (no code overlap except README and Cargo/Tauri version metadata).
-- REQ-010 || REQ-011 after their dependencies, in parallel with REQ-012.
-- UX design runs for later tickets can be produced ahead while dev works on an earlier ticket.
+### What can run in parallel (decision: sequential dev, stated by owner 2026-11-11)
+Dev stays sequential, one feature branch at a time. What still overlaps safely without worktrees (it touches no code branch):
+- UX design runs for later tickets while dev works on an earlier one (design notes live in the vault only).
+- BA, PM and spike research (web-fetch for S3 and S6) while dev runs.
+- Owner review of the previous ticket while the next ticket's plan is written.
+- REQ-012 documentation parts (README text, code signing policy, privacy wording) could be drafted by the documentor in the vault, but anything touching the repo tree waits its turn.
 
-**Flag: shared working tree.** Parallel dev on two feature branches in one checkout will clobber files and break builds. Each parallel dev/tester run needs its own `git worktree` (and its own `target/` directory, which means a full Cargo rebuild per worktree, about the 226-crate first build seen in REQ-000, so budget extra disk and a few minutes each, measured only for the first build). Without worktrees, run sequentially. Also, `Cargo.lock`, `package-lock.json`, `src/strings.ts` and `tauri.conf.json` are shared hot files and will conflict on merge.
+Would be possible with worktrees (not used now, kept for later if the owner changes the decision): 002 || 008; 004 || 005 || 006 || 009 after 003; REQ-012 CI work; 010 || 011. Flag: parallel dev in one checkout clobbers files; each parallel dev/tester run would need its own `git worktree` and its own `target/` (a full Cargo rebuild, 226 crates in REQ-000). `Cargo.lock`, `package-lock.json`, `src/strings.ts` and `tauri.conf.json` are hot files that would conflict on merge.
 
 ### Dependency flowchart (relative order, no dates)
 
 ```mermaid
 flowchart LR
-  R0[REQ-000 skeleton\nfinish after BUG-001] --> R1[REQ-001 runtimes]
+  R0[REQ-000 DONE, merged] --> SP[Spikes S1 to S5]
+  SP --> UX1[UX review 1: shell and states]
+  UX1 --> R1[REQ-001 runtimes]
   R1 --> R2[REQ-002 capabilities]
-  R1 --> R8[REQ-008 errors]
-  R2 --> R3[REQ-003 list]
-  R8 --> R3
+  R2 --> R8[REQ-008 errors]
+  R8 --> UX2[UX review 2: main screen]
+  UX2 --> R3[REQ-003 list]
   R3 --> R4[REQ-004 lifecycle]
-  R3 --> R5[REQ-005 logs]
-  R3 --> R6[REQ-006 live updates]
-  R3 --> R11[REQ-011 stats]
-  R4 --> R7[REQ-007 safe destructive]
-  R7 --> R10[REQ-010 sessions panel]
-  R3 --> R10
-  R1 --> R9[REQ-009 update check]
-  R2 --> R9
-  R0 --> R12a[REQ-012a repo hygiene and CI]
-  R9 --> R12b[REQ-012b release plus SignPath]
-  R4 --> MVP{{MVP complete}}
-  R5 --> MVP
-  R6 --> MVP
-  R7 --> MVP
-  R9 --> MVP
-  MVP --> R12b
-  R12a --> R12b
-  R12b --> WAIT[(SignPath wait, unknown)]
+  R4 --> UX3[UX review 3: dialogs and banners]
+  UX3 --> R7[REQ-007 safe destructive]
+  R7 --> R6[REQ-006 live updates]
+  R6 --> UX4[UX review 4: log viewer]
+  UX4 --> R5[REQ-005 logs]
+  R5 --> R9[REQ-009 update check]
+  R9 --> MVP{{MVP complete}}
+  MVP --> R12[REQ-012 unsigned release, SignPath application]
+  R12 --> WAIT[(SignPath wait, unknown)]
   WAIT --> SIGNED[First signed release]
+  R12 --> R11[REQ-011 stats]
+  R11 --> R10[REQ-010 sessions panel]
 ```
 
 ### Gantt by relative work phase (not calendar, unit = owner review sessions)
@@ -154,28 +167,30 @@ gantt
   dateFormat X
   axisFormat %s
   section Foundation
-  REQ-000 fix and finish          :a0, 0, 1
-  Spikes S1 to S4 (hardware)      :s1, 0, 2
-  section Core MVP
-  UX batch 1 shell and states     :u1, 1, 2
-  REQ-001                         :a1, 2, 3
-  REQ-002 and REQ-008 (worktrees) :a2, 3, 5
-  UX batch 2 main screen          :u2, 3, 4
-  REQ-003                         :a3, 5, 7
-  REQ-004                         :a4, 7, 8
-  REQ-007                         :a7, 8, 9
-  section Parallel after 003
-  REQ-006 live updates            :a6, 7, 9
-  REQ-005 logs                    :a5, 7, 9
-  REQ-009 update check            :a9, 5, 8
-  REQ-012a repo and CI            :a12a, 4, 8
+  REQ-000 done                    :done, a0, 0, 1
+  Spikes S1 to S5 (hardware)      :s1, 1, 2
+  section Core MVP (sequential)
+  UX review 1 shell and states    :u1, 2, 3
+  REQ-001                         :a1, 3, 4
+  REQ-002                         :a2, 4, 5
+  REQ-008                         :a8, 5, 6
+  UX review 2 main screen         :u2, 6, 7
+  REQ-003                         :a3, 7, 9
+  REQ-004                         :a4, 9, 10
+  UX review 3 dialogs and banners :u3, 10, 11
+  REQ-007                         :a7, 11, 12
+  REQ-006                         :a6, 12, 13
+  UX review 4 log viewer          :u4, 13, 14
+  REQ-005                         :a5, 14, 15
+  REQ-009                         :a9, 15, 17
   section Release gate and later
-  REQ-012b unsigned release       :a12b, 9, 10
-  SignPath application then wait  :crit, w, 10, 13
-  REQ-010 and REQ-011             :a10, 9, 11
+  REQ-012 unsigned release        :a12, 17, 19
+  SignPath application then wait  :crit, w, 19, 22
+  REQ-011                         :a11, 19, 20
+  REQ-010                         :a10, 20, 21
 ```
 
-One unit is roughly one owner review session of 1 to 3 hours. The SignPath bar width is a placeholder, the real wait is unknown.
+One unit is roughly one owner review session or ticket slot of about 1 to 3 h (at 10 h/week, about 3 to 5 units per week, so the MVP bar of about 15 units after the spikes is roughly 3 to 5 weeks at the pessimistic slot size and about 2 to 3 at the likely size; treat as order of magnitude only). The SignPath bar width is a placeholder, the real wait is unknown.
 
 ## 7. Spikes to retire the biggest [U] risks first
 
@@ -191,18 +206,18 @@ Order by (risk retired x tickets unblocked) / cost. All are cheap (minutes of ag
 | S6 | SignPath feasibility desk check: application steps, Tauri NSIS/MSI and Rust binary support, one-person roles, privacy statement (web-fetch helper, 2 to 3 runs) and, later, a test signing request | [U] in 012 | 5 to 10 min agent plus 30 min owner reading | decides REQ-012 shape; real turnaround only learnable by applying |
 | S7 | Timing check of go/no-go measures from [[ba-analysis]] section 10 (list under 1 s, events under 1 s, start/stop under 3 s) | performance claims in 003, 006 | 30 min owner | early warning |
 
-Not spikeable here: behaviour when `wslc` is missing or WSL too old (needs uninstall or a clean VM, see Q4). Mitigation: simulate with an injected fake runner (already supported, REQ-000 AC4) and mark manual verification as pending.
+Not spikeable here: behaviour when `wslc` is missing or WSL too old (needs uninstall or a clean VM, see open question 2). Mitigation: simulate with an injected fake runner (already supported, REQ-000 AC4) and mark manual verification as pending.
 
 ## 8. Top risks
 
 | # | Risk | Effect on estimate | Mitigation |
 |---|---|---|---|
-| 1 | Owner review capacity unknown and is the bottleneck | Calendar could be 3x the agent estimate or more | answer Q1, batch UX and reviews, use plan-level approvals |
+| 1 | Owner review capacity (10 h/week, stated) is the bottleneck, and actual review hours are unmeasured | Calendar is review-bound, not agent-bound | batch UX (accepted), plan-level approvals, log real review minutes in [[actuals]] |
 | 2 | SignPath timing and acceptance unknown (project must already be released, no numeric reputation threshold [R]) | Unbounded external wait, possible rejection | release unsigned first, apply right after, keep unsigned fallback, desk check S6 |
 | 3 | REQ-003 is oversized (parser, labels, filter, multi-session, performance) | Likely the first ticket to overrun, delays 004/005/006/010/011 | consider splitting into list core and filters/labels; S2, S4 first |
 | 4 | Untested wslc commands (`remove`, `kill`, `session terminate`, failures) [U] | 007, 010 re-plan if behaviour surprises | S1, S2 before their tickets |
 | 5 | REQ-009 network and UAC flow: GitHub vs channel mismatch [U], first network code touches the strict CSP/capabilities that REQ-000's tests assert | Extra loop, possible QA hygiene test updates | S3, run update path against a stub, keep daily check off in tests |
-| 6 | Parallel dev without worktrees corrupts the tree, plus per-worktree full builds | Lost time, flaky builds | worktrees per parallel branch, or stay sequential |
+| 6 | Sequential dev (stated by owner) removes parallel speed-up, so a stalled ticket (REQ-003) blocks everything | Slip moves the whole MVP one-for-one | split REQ-003 if needed (open), revisit worktrees only if a slip is serious |
 | 7 | Schema drift on WSL versions other than 3.0.5.0 [U] | Late defects, contract test additions | tolerant parsing already required, fixture per version |
 | 8 | One data point for agent time (REQ-000 had no UI heavy work, no real wslc process runner yet) | All agent ranges may be off by 2x either way | update [[actuals]] after each ticket, re-estimate after REQ-001 |
 | 9 | Real `wslc` process runner not built yet (REQ-000 uses a fake runner) | First real timeouts, kill-on-close, streaming code lands in 001/005/006 and may be harder than the fake | include process-runner hardening in 001's plan |
@@ -210,29 +225,30 @@ Not spikeable here: behaviour when `wslc` is missing or WSL too old (needs unins
 
 ## 9. Recommended sequencing and scope cuts
 
-1. Finish REQ-000 (BUG-001 fix, retest, owner review, finish).
+1. REQ-000: done (stated by owner).
 2. Run spikes S1 to S5 in one owner session (about 2 to 3 h total), one dev/agent run to commit the fixtures.
-3. UX batch 1 (shell and states), then REQ-001, REQ-002 and REQ-008. Use worktrees only if the owner wants them in parallel.
-4. UX batch 2, REQ-003 (consider the split), REQ-004, REQ-007.
-5. REQ-006, REQ-005, REQ-009 (parallel with worktrees, or serial).
-6. REQ-012: hygiene and CI start any time after step 1 as a background stream. Release unsigned after the MVP, apply to SignPath immediately.
-7. REQ-010 and REQ-011 last. If time is short, cut REQ-010 first (it depends on the least verified commands) and keep REQ-011 (cheap, low risk).
+3. UX review 1 (shell and states), then REQ-001, REQ-002 and REQ-008, one at a time.
+4. UX review 2 (main screen), REQ-003 (consider the split), REQ-004; UX review 3 (dialogs and banners), REQ-007.
+5. REQ-006; UX review 4 (log viewer), REQ-005; REQ-009 (earlier if S3 shows trouble).
+6. REQ-012 after the MVP (repo hygiene text can be drafted earlier in the vault). Release unsigned, apply to SignPath immediately.
+7. REQ-011 then REQ-010. If time is short, cut REQ-010 first (it depends on the least verified commands) and keep REQ-011 (cheap, low risk). REQ-010 and 011 UX comes with review 3 and review 2 addenda, as accepted.
 8. Cuts if the schedule slips: REQ-010 and REQ-011 are already Should. Inside Must tickets the cheapest cuts are the 50-row render-time criterion and filters of REQ-003 (keep a plain sorted table), and the "also delete volumes" option in REQ-007 (hide it, the ticket already allows this).
 
 ## 10. Open questions for the owner
 
-1. How many hours per week can you spend on review and decisions, and are there fixed days? (Converts owner hours into calendar time, see section 5.)
-2. Target dates or milestones (MVP, first public release)? Is there a hard date?
-3. Hardware for manual checks: is the current Windows 11 machine with WSL 3.0.5.0 and wslc the only machine? Is a second user account or a clean VM available for the missing-wslc and fresh-install cases?
-4. WSL versions: can you install an older or newer WSL build (other than 3.0.5.0) to check schema drift and the version gates (3.0.5, 3.1.0)? Is 3.1.0 or newer available to you at all?
-5. SignPath: who fills the roles author, reviewer, approver for a one-person project, and are you willing to apply right after the first unsigned release? Turnaround is unknown, so how long are you willing to wait before treating it as "unsigned only"?
-6. Is the GitHub repository ready to be made public (the remote is not pushed yet per [[decision-log]]), and who owns MFA setup?
-7. Do you accept batching UX into about 4 design reviews instead of one per ticket, and splitting REQ-003 if needed?
-8. Do you want parallel dev (requires worktrees and extra build time) or strictly sequential?
+Answered (stated by owner, 2026-11-11): weekly capacity 10 h, UX batching accepted, sequential dev, REQ-000 done. The rest is still open:
+
+1. Target dates or milestones (MVP, first public release)? Is there a hard date?
+2. Hardware for manual checks: is the current Windows 11 machine with WSL 3.0.5.0 and wslc the only machine? Is a second user account or a clean VM available for the missing-wslc and fresh-install cases?
+3. WSL versions: can you install an older or newer WSL build (other than 3.0.5.0) to check schema drift and the version gates (3.0.5, 3.1.0)? Is 3.1.0 or newer available to you at all?
+4. SignPath: who fills the roles author, reviewer, approver for a one-person project, and are you willing to apply right after the first unsigned release? Turnaround is unknown, so how long are you willing to wait before treating it as "unsigned only"?
+5. `develop` and `main` are pushed to GitHub (stated by owner): is the repository public yet, or when will it be, and who sets up MFA? (Needed before REQ-012.)
+6. Do you want REQ-003 split into list core and filters/labels, or kept whole?
+7. Can spikes S1 to S5 be done in one session of about 2 to 3 h before REQ-001 starts?
 
 ## 11. What data would improve these estimates
 
 - Real agent time and review time for REQ-001, REQ-002 (log them in [[actuals]]), then re-estimate the rest.
-- Owner's weekly hours (Q1) and how long reviews actually take.
+- How long reviews actually take (weekly hours are known: 10 h, stated by owner).
 - Whether the first real process-runner implementation (REQ-001) is much heavier than the REQ-000 fake.
 - Outcome of S1 to S5.

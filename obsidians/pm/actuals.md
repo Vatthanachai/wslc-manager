@@ -27,8 +27,11 @@ Git span (measured, +0700, 2026-11-11): initial commit `6e92a54` 14:25:09, vault
 | [[REQ-000-walking-skeleton]] | Plan and tasks | none made | not recorded | n/a | record plan time from REQ-001 on |
 | [[REQ-000-walking-skeleton]] | Dev | none made | about 6.5 min (390 s), ~68k tokens, 45 tool calls, first Tauri/Cargo build of 226 crates included (measured) | n/a | first build is a one-off cost, later tickets should not repeat it unless a fresh worktree is used |
 | [[REQ-000-walking-skeleton]] | Tester | none made | about 3.1 min (188 s), ~61k tokens. 46 tests passed, 2 ignored. 1 defect BUG-001 (low, BOM) (measured, [[REQ-000-test-report]]) | n/a | tester produced 355 plus 168 lines of extra tests and found an edge case the dev claimed to handle: a tester pass is worth keeping |
-| [[REQ-000-walking-skeleton]] | Dev fix BUG-001 | none made | requested, not yet run | pending | log run time when done, plus retest time |
-| [[REQ-000-walking-skeleton]] | Owner review and `git flow feature finish` | none made | not yet done, human time not recorded | pending | start timing owner review in minutes per stage |
+| [[REQ-000-walking-skeleton]] | Dev fix BUG-001 | none made | 0.5 min (28 s) (measured) | n/a | a one-line fix costs seconds of agent time; the cost is in the loop, not the fix |
+| [[REQ-000-walking-skeleton]] | Tester re-verification | none made | about 0.9 min (55 s) (measured), verdict pass | n/a | retest is cheap |
+| [[REQ-000-walking-skeleton]] | Owner review and `git flow feature finish` | none made | done, merged into `develop` (stated by owner, 2026-11-11); human time not recorded | n/a | start timing owner review in minutes per stage |
+
+REQ-000 total agent time (measured): 6.5 + 3.1 + 0.5 + 0.9 = about 11 min across dev, test, fix and retest, status DONE. Owner capacity is 10 h/week (stated by owner, 2026-11-11).
 
 Observations that affect later estimates (measured or from the report):
 - Test and dev were separate runs of similar length, so the tester stage is about half of dev time (3.1 vs 6.5 min), small sample.
