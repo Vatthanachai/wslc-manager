@@ -42,10 +42,8 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - name: Rust toolchain components
-        shell: bash
-        run: rustup component add rustfmt clippy
-
+      # The toolchain (and rustfmt/clippy) come from rust-toolchain.toml; rustup installs
+      # it on the first rustc call, which rust-cache makes to put the version in its key.
       - name: Cache Cargo
         uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
 
