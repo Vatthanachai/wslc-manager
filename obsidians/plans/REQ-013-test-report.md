@@ -1,6 +1,6 @@
 ---
 ticket: REQ-013
-status: partial
+status: pass
 tags:
   - test-report
 ---
@@ -171,4 +171,52 @@ No UI change in this ticket; no screens to compare with `obsidians/design/`.
 
 ## 8. Verdict
 
-**Partial.** Code, tests and workflows meet criteria A3 to A6, B1 to B7, C1 to C7, C9 to C12 and D, with evidence above. Blocking before the ticket can be closed: BUG-001 (ticket text) and A2 (add the DoD line to REQ-001 to REQ-012, owner or `ba`). Low items BUG-002, BUG-003 (test added), BUG-004 need an owner decision. Owner decisions still open: pin the Rust toolchain; add `ci-check` and `branch-policy` as required checks on ruleset 27014559 after this ticket merges (not before the checks have run on a PR into `main`); optionally pin npm and add `edited` to the branch-policy trigger.
+**Initial verdict (commit `9a76266`): partial.** Blocking items were BUG-001 and A2 (F1). Both were fixed, see section 9.
+
+**Final verdict after re-verification (commit `bc636a0`): pass.** No defect above Low remains and the Definition of Done is met for what can be checked before a PR exists. The Low items and the open decisions are listed in section 9.
+
+## 9. Re-verification (commit `bc636a0`, 2026-11-11)
+
+Fixes checked: BUG-001 (ticket text), BUG-002 (Rust pin), BUG-003 (added test kept), BUG-004 (`edited` trigger), F1 (DoD lines). No production code was edited by QA.
+
+Local, on the pinned toolchain (`rustc 1.99.1 (58cf8f9c3 2026-10-13)`, picked up from `rust-toolchain.toml`):
+
+| Command | Result |
+|---|---|
+| `cargo fmt --check` | exit 0 |
+| `cargo clippy --workspace --all-targets -- -D warnings` | exit 0 |
+| `cargo test --workspace` | exit 0, 61 passed, 0 failed, 1 ignored |
+| `npm ci` | exit 0, 65 packages, 0 vulnerabilities, esbuild install-scripts warning (local npm 12.2.1: "1 package had install scripts blocked because they are not covered by allowScripts") |
+| `npm run build` | exit 0 |
+| `npm test` | exit 0, 2 files, 17 tests |
+
+Per fix:
+
+- **BUG-001: fixed.** The ticket now links `[[qa/README]]`, `[[qa/test-strategy]]`, `[[qa/qa-integration-convention]]`, `[[qa/definition-of-done]]` (lines 26 and 38), records job names `ci-check` and `branch-policy` (lines 27, 62, 63, 67), answers the open questions (lines 108 to 116) and states the decisions. The frontmatter `status` is still `todo`; update it when the ticket is finished (DoD checklist item), not a defect now.
+- **BUG-002: fixed for Rust, residual for npm and Node (accepted).** `rust-toolchain.toml` = channel 1.99.1, profile minimal, components rustfmt and clippy. `ci.yml` no longer has the `rustup component add` step (the diff shows only that removal and a comment). Run `42987423621` shows all steps green on the runner. The npm version is deliberately not pinned (owner decision so far): CI uses npm 11.19.1 with Node 24.22.2, local uses npm 12.2.1 with Node 24.21.0. The ticket risk text (line 93) still lists "pin Node and npm" as a mitigation; the later line 97 states npm is not pinned.
+- **BUG-003: kept.** `src/main.dom-safety.test.ts` is in the tree and passes.
+- **BUG-004: trigger corrected, behaviour unverified on GitHub.** `branch-policy.yml` now has `types: [opened, synchronize, reopened, edited]` before `branches: [develop, main]`. `git diff 9a76266..HEAD -- .github` shows only the two added lines in that file, so the shell script is unchanged (the 34-case table from section 3 still applies). Whether an `edited` event after a base change actually re-runs the check was not verified: GitHub writes are not allowed, so no PR probe.
+- **F1: fixed.** `grep` for `[[qa/definition-of-done` finds one line in each of REQ-001 to REQ-012 and in the requirements index, and four mentions in REQ-013. The diffstat of each of REQ-001 to REQ-012 is +3 -0; I read the diffs of REQ-001, REQ-007 and REQ-012 and each is the same three added lines (heading `## Definition of done`, one bullet linking `[[qa/definition-of-done]]`, blank line); the other nine were checked by diffstat only; `obsidians/requirements/README.md` gained one sentence about the DoD line. REQ-000 is exempt per the ticket text (line 39).
+
+CI run `42987423621` (commit `bc636a0`, read with `gh run view`): conclusion success, every step success (fmt, clippy, test, `npm ci`, build, test). Logs: Node v24.22.2, npm 11.19.1; node cache "Cache hit for: node-cache-Windows-x64-npm-294bc9..."; Cargo "Cache hit for restore-key: v0-rust-ci-check-Windows_NT-x64-bc559819-79de1796", "full match: false" (the key changed because the toolchain file changed, so the older cache was restored by prefix and then re-saved); `npm ci` prints "npm warn install-scripts 1 package has install scripts not yet covered by allowScripts: esbuild@0.28.2 (postinstall: node install.js)" and the build and tests pass anyway.
+
+Criteria against the final ticket text (numbering unchanged): A1 met (links now in the ticket), A2 met (12 of 12 tickets), A3 to A6 met as before, B1 to B7 met as before, C1 to C7 met as before, C8 met (job name recorded in the ticket), C9 to C12 met, the new `edited` trigger criterion met in the file and unverified in behaviour, D met. Items that the ticket says go "in the PR" (jsdom choice, hand-checked broken assertion, the five probes) are still pending because no PR exists.
+
+Open Low items and owner decisions:
+
+| Id | Severity | Status | Owner decision needed |
+|---|---|---|---|
+| BUG-002 | Low | partly fixed | Pin npm and Node patch version or accept the difference; add an esbuild `allowScripts` entry or accept the warning. A switch to bun is being considered as a separate ticket |
+| BUG-004 | Low | fixed in file, unverified on GitHub | Verify once with a throwaway PR whose base is changed |
+
+Remaining unverified (updated list):
+
+- The create-and-delete path of the integration helper against real wslc (sweep, `remove --force`, drop guard; flag and JSON key are [U]).
+- `npm test` on a machine without Rust, WebView2 and WSL.
+- Cache scoping between PR runs and base branches.
+- Behaviour of the `edited` trigger when a PR base is changed.
+- Pull requests from forks whose branch is named `develop` (the policy compares names only).
+- The esbuild install-scripts warning on npm 11 in CI (seen in the log above, builds and tests pass; effect of an `allowScripts` entry not tested).
+- PR-only items (see above) and the earlier gaps in section 7 that still apply.
+
+Owner decisions that remain: npm and Node pin, esbuild `allowScripts`, the possible bun ticket, and, after the first green PR into `main`, adding `ci-check` and `branch-policy` as required status checks on ruleset 27014559 (recorded in `obsidians/decision-log.md`).
