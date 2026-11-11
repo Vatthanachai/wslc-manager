@@ -61,3 +61,10 @@ Ticket acceptance criteria A to D met or explicitly marked pending; `tester` ver
 - `branch-policy` probes through real PRs: feature -> `main` FAILED with the message "Pull requests into main must come from develop, release/* or hotfix/*."; feature -> `develop` passed; `release/*` -> `main` passed.
 - Caveat found: when two PRs share the same head SHA (e.g. one into `develop` and one into `main`), the check runs of both land on the same commit and both show in each PR's status rollup (one FAILURE, one SUCCESS). GitHub's required-check evaluation for such a case depends on which run is latest, so a passing run could mask a failing one. The risk only exists for a head branch with PRs into both bases, which git flow does not normally do (feature -> `develop` only; `develop`/`release/*`/`hotfix/*` -> `main`). Mitigation if it matters: never open a PR into `main` from a `feature/*` branch (the check is meant to prevent it) and keep the rule as a guard, not a security boundary.
 - Cache: first run built from cold; second run time not compared here [U].
+
+### Toolchain pin
+
+- Owner decision: pin Rust with `rust-toolchain.toml` (`channel = "1.99.1"`, `profile = "minimal"`, components `rustfmt` and `clippy`), the exact version the runner used in the passing run. `rust-version = "1.80"` in `Cargo.toml` is unchanged (it is the minimum, not the build toolchain).
+- `ci.yml`: the `rustup component add rustfmt clippy` step was removed; rustup installs the pinned toolchain on the first `rustc`/`cargo` call. `Swatinem/rust-cache` (v2.9.3) keys on the current `rustc` version, all `Cargo.toml`/`Cargo.lock` files and the root `rust-toolchain.toml`, so a version bump gives a fresh cache. Step names, order, job names, triggers and other pins are unchanged.
+- Upgrade deliberately: edit the version in `rust-toolchain.toml` and fix any new lints in the same PR.
+- `branch-policy.yml` also runs on `edited` (changing a PR's base branch only fires `edited`; BUG-004). The shell script is byte-identical.

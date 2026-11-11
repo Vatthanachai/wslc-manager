@@ -87,6 +87,8 @@ npm run build
 npm test
 ```
 
+The Rust toolchain is pinned in `rust-toolchain.toml` (1.99.1 with `rustfmt` and `clippy`), so local runs and CI use the same compiler and lints. The first `cargo` call downloads it through rustup (a few minutes). To upgrade deliberately, edit the version in `rust-toolchain.toml` and fix any new lints in the same pull request.
+
 `npm test` runs Vitest once (jsdom, no watch mode) and needs no Tauri, WebView2, Rust or WSL. The workflow `branch-policy` (job `branch-policy`) only allows pull requests into `main` from `develop`, `release/*` and `hotfix/*`.
 
 Test strategy, Definition of Done and the integration-test convention are in [`obsidians/qa/`](obsidians/qa/README.md): [test strategy](obsidians/qa/test-strategy.md), [definition of done](obsidians/qa/definition-of-done.md), [integration convention](obsidians/qa/qa-integration-convention.md).
