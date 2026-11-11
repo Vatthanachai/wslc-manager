@@ -83,7 +83,7 @@ Why Node stays: Vitest does not start without Node (its worker fails with an `Ev
 - **`edited` trigger unverified.** `edited` was added so that a base change re-runs the check. Whether GitHub really re-runs it after a base change was not verified (no probe PR for that).
 - **`bun test` is refused.** A preload in `bunfig.toml` makes it fail loudly, with noisy output (REQ-014 BUG-003, accepted). Use `bun run test`.
 - **`bun install --frozen-lockfile` accepts a range edit** that the lock still satisfies (REQ-014 O1). It fails on a new dependency.
-- **The `main` ruleset has no required status checks yet** (as of the REQ-013 report). Adding `ci-check` and `branch-policy` is an owner step, to be recorded in [[decision-log]].
+- **`ci-check` and `branch-policy` are required status checks on the `main` ruleset** (D19, 2026-11-11, `strict` off, both bound to the GitHub Actions app id 15368). If a job is renamed, removed or skipped by a trigger or path rule, the required check never reports and pull requests into `main` wait forever: change the ruleset first. The required checks do not apply to `develop` or to topic branches. Recorded in [[decision-log]].
 - Cache scoping between PR runs and the base branch was not examined.
 
 ## 6. Bump a pin deliberately
