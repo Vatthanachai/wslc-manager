@@ -16,6 +16,19 @@ Things not yet proven on a real machine. Update this page when a spike or a tick
 - Whether containers created through the C SDK appear in the CLI, and whether sessions persist after logoff or reboot.
 - Minimum WSL version for `wslc.exe` (3.0.1 is from a release-notes summary).
 
+## Availability and error UI (REQ-001, REQ-002, REQ-008), added 2026-11-11
+- `wslc system session list` output with 0 sessions (is it `[wslc] Found 0 sessions` with no table?) and with 2+ sessions (count line wording). 0 sessions is decided to be a success [R from source: OpenOrCreateDefaultSession].
+- How to identify the session the CLI uses when `--session` is omitted (optional "default" badge). Known [V]: one session ID 1, PID 40580, `wslc-cli-<user>`; the CLI resolves the default from the caller's token.
+- A real `WSLC_E_RUNTIME_UPDATE_NEEDED` output [R, token only], any real signal for WslTooOld, and any rule for MissingComponents [U, no evidence].
+- How a missing `wslc.exe` and a missing WSL look to the app (spawn error, exit code).
+- `wsl --version` timing on a cold machine against the 3 s target.
+- Exact text of `wsl --install` (displayed only, never run by the app in this batch).
+- Whether a permission-denied failure can be told from CommandFailed (not detected for now).
+- Window focus event behaviour in WebView2 (used for the gate re-check, at most once per 5 s).
+- Behaviour with a wslc version other than 3.0.5.0, and whether the wslc and WSL versions can differ.
+- Real 2+ session behaviour with one slow session and the concurrency limit of 4.
+- Tickets: [[REQ-001-discover-runtimes]], [[REQ-002-detect-engine]], [[REQ-008-error-handling]]. Design: [[REQ-001-002-008-ux]].
+
 ## Update check
 - A sample GitHub releases API response, and how the release tag relates to what `wsl --update` installs. Ticket: [[REQ-009-wsl-update-check]].
 
