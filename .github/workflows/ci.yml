@@ -35,7 +35,7 @@ jobs:
         with:
           persist-credentials: false
 
-      # Node stays: bun installs and builds, but Vitest runs on Node (REQ-014). No npm cache.
+      # Node stays: bun installs and builds, but Vitest runs on Node (REQ-014). No Node package cache.
       - name: Set up Node from .nvmrc
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
