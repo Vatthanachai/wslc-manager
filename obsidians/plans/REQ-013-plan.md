@@ -37,15 +37,15 @@ npm 12 blocking install scripts (esbuild) · Tauri crate compiling on the runner
 
 ## Tasks (in order, tick them off; report deviations)
 
-- [ ] T1 `.nvmrc` (Node 24), `engines` in `package.json`; record `node -v` / `npm -v`. Local `npm ci` still works. (B: pinned by lockfile)
-- [ ] T2 Add `vitest` + `jsdom`, `vitest.config.ts`, `npm test` script (`vitest run`). Confirm the esbuild install-script situation on a clean `npm ci` (delete `node_modules` first) and document any allow-list needed. (B)
-- [ ] T3 UI tests for `main.ts`: table with the one fake container (fields + headers from `strings.ts`), empty list (no data row, empty-state text from `strings.ts`), error path via `textContent` with the XSS payload (no element created, text literal). Refactor only if unavoidable. (B, criteria 1 to 7)
-- [ ] T4 Prove a broken assertion fails `npm test` (non-zero exit), once, and note it. (B)
-- [ ] T5 Rust integration-test helper + convention in `crates/engine/tests/` (ignored by default, `WSLC_INTEGRATION=1` guard, `aiyara-test-` prefix, sweep, drop-guard cleanup, never touches non-prefixed resources), one read-only example test. `cargo test --workspace` reports it as ignored and spawns no process. (A)
-- [ ] T6 `ci.yml` (job `ci-check`): fmt, clippy `-D warnings`, test, `npm ci`, `npm run build`, `npm test`; triggers, permissions, pinned SHAs (verified), caches, timeout, concurrency. (C)
-- [ ] T7 `branch-policy.yml` (job `branch-policy`): passes for head `develop`, `release/*`, `hotfix/*` into `main`; fails with a message naming them for any other head into `main`; passes or is skipped for PRs into `develop`; injection-safe. Test the shell logic locally with a small table of branch names (including odd characters and long names). (C)
-- [ ] T8 README "Local checks" + integration-test instructions; link the QA documents. (D, A)
-- [ ] T9 Run all local checks (`cargo fmt --check`, clippy, `cargo test --workspace`, `npm ci && npm run build && npm test`) and report real output. Commit in small conventional commits ending with the Co-Authored-By line. Do not push.
+- [x] T1 `.nvmrc` (Node 24), `engines` in `package.json`; record `node -v` / `npm -v`. Local `npm ci` still works. (B: pinned by lockfile)
+- [x] T2 Add `vitest` + `jsdom`, `vitest.config.ts`, `npm test` script (`vitest run`). Confirm the esbuild install-script situation on a clean `npm ci` (delete `node_modules` first) and document any allow-list needed. (B)
+- [x] T3 UI tests for `main.ts`: table with the one fake container (fields + headers from `strings.ts`), empty list (no data row, empty-state text from `strings.ts`), error path via `textContent` with the XSS payload (no element created, text literal). Refactor only if unavoidable. (B, criteria 1 to 7)
+- [x] T4 Prove a broken assertion fails `npm test` (non-zero exit), once, and note it. (B)
+- [x] T5 Rust integration-test helper + convention in `crates/engine/tests/` (ignored by default, `WSLC_INTEGRATION=1` guard, `aiyara-test-` prefix, sweep, drop-guard cleanup, never touches non-prefixed resources), one read-only example test. `cargo test --workspace` reports it as ignored and spawns no process. (A)
+- [x] T6 `ci.yml` (job `ci-check`): fmt, clippy `-D warnings`, test, `npm ci`, `npm run build`, `npm test`; triggers, permissions, pinned SHAs (verified), caches, timeout, concurrency. (C)
+- [x] T7 `branch-policy.yml` (job `branch-policy`): passes for head `develop`, `release/*`, `hotfix/*` into `main`; fails with a message naming them for any other head into `main`; passes or is skipped for PRs into `develop`; injection-safe. Test the shell logic locally with a small table of branch names (including odd characters and long names). (C)
+- [x] T8 README "Local checks" + integration-test instructions; link the QA documents. (D, A)
+- [x] T9 Run all local checks (`cargo fmt --check`, clippy, `cargo test --workspace`, `npm ci && npm run build && npm test`) and report real output. Commit in small conventional commits ending with the Co-Authored-By line. Do not push.
 - [ ] T10 (main assistant) push the feature branch, confirm the CI run is green, run the five deliberate-failure probes and the branch-policy probes, record job names in the ticket, delete probe branches.
 - [ ] T11 (`tester`) verify against the ticket's criteria and the QA Definition of Done; report in `obsidians/plans/REQ-013-test-report.md`.
 - [ ] T12 (owner, separate step) after both jobs ran green at least once: decide whether to add `ci-check` and `branch-policy` as required status checks on ruleset 27014559 and record it in [[decision-log]].
