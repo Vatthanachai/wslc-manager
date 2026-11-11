@@ -39,7 +39,7 @@ Rules: a test sits at the lowest level that can prove the claim. No test depends
 ## 3. UI smoke via WebView2 remote debugging (L5)
 
 Method used for REQ-000:
-1. Build `npx tauri build --debug --no-bundle`.
+1. Build `bunx tauri build --debug --no-bundle`.
 2. Set `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--remote-debugging-port=9222` and `WEBVIEW2_USER_DATA_FOLDER` to a fresh throwaway folder (never the user's profile).
 3. Start the exe. `GET http://127.0.0.1:9222/json` lists the page; use CDP `Runtime.evaluate` to read the DOM and `Page.captureScreenshot` for evidence. DOM text is the authoritative evidence, a screenshot is supporting.
 4. Always kill the app and the test-profile `msedgewebview2` processes afterwards (filter by the throwaway folder; leave other apps' WebView2 alone), then delete the folder. Verify 0 leftover processes.
@@ -53,7 +53,7 @@ Measure at least 10 runs, report median and worst, with machine, WSL and wslc ve
 
 ## 5. CI versus local
 
-CI (GitHub-hosted Windows, no wslc): `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace --all-targets` and `--doc`, `npm run build`, `npm test`. `#[ignore]` tests are listed but not run. Local only: L5 to L8. Changes to CI or caching need their own ticket ([[REQ-013-ci-and-qa-baseline]], [[REQ-012-release-and-signing-pipeline]]).
+CI (GitHub-hosted Windows, no wslc): `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace --all-targets` and `--doc`, `bun install --frozen-lockfile`, `bun run build`, `bun run test` (never `bun test`: it is bun's own runner and ignores `vitest.config.ts`). `#[ignore]` tests are listed but not run. Local only: L5 to L8. Changes to CI or caching need their own ticket ([[REQ-013-ci-and-qa-baseline]], [[REQ-012-release-and-signing-pipeline]]).
 
 ## 6. Fixture capture procedure
 

@@ -14,7 +14,7 @@ Applies to every ticket in [[README|requirements index]] before `git flow featur
 
 - [ ] Each acceptance criterion is mapped to a test (name in the report) or to a recorded manual check (who, when, machine, result).
 - [ ] `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace --all-targets` and `cargo test --doc` pass.
-- [ ] `npm run build` and `npm test` pass (frontend runner from [[REQ-013-ci-and-qa-baseline]]).
+- [ ] `bun run build` and `bun run test` pass (frontend runner from [[REQ-013-ci-and-qa-baseline]], package manager from [[REQ-014-switch-package-manager-to-bun]]). Never `bun test`.
 - [ ] Tester report `obsidians/plans/REQ-NNN-test-report.md` exists with verdict pass and no open defect above Low. Each open Low defect is listed with an owner decision (accept, fix later with ticket id).
 - [ ] Every new [V] fact has a fixture (captured per [[test-strategy]] section 6) and a contract test, and is recorded in [[ba-analysis]].
 - [ ] Unverified [U] items the ticket depends on are listed in the report and in [[unverified-items]], each with a spike result or a marked pending manual check.
@@ -57,7 +57,7 @@ File `obsidians/plans/REQ-NNN-test-report.md`, frontmatter `ticket`, `status` (p
 1. Title, requirement link, [[ba-analysis]] link, branch, date, OS.
 2. Summary: what works, defects found, verdict.
 3. Test matrix: table Criterion / Test / Result (every acceptance criterion, plus parser, security, hygiene rows).
-4. Commands run: exact commands with real counts (passed, failed, ignored), clippy, fmt, npm, app launch evidence.
+4. Commands run: exact commands with real counts (passed, failed, ignored), clippy, fmt, bun, app launch evidence.
 5. Defects: per the template above, with re-verification notes.
 6. Notes for later tickets and observations (not defects).
 7. Unverified: what was not tested and why ([U] items, real wslc, MSI, VM, high DPI).
