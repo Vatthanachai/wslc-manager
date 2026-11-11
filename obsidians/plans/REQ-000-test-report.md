@@ -1,6 +1,6 @@
 ---
 ticket: REQ-000
-status: partial
+status: pass
 tags: [test-report]
 ---
 
@@ -10,7 +10,7 @@ Requirement: [[REQ-000-walking-skeleton]]. Context: [[ba-analysis]]. Branch `fea
 
 ## Summary
 
-The skeleton builds, lints and runs. All five acceptance criteria are met in substance. The window renders the one FakeConnector container through the real Tauri command path (confirmed via WebView2 DevTools protocol and a screenshot). One defect found: a UTF-8 BOM in stdout makes `parse_container_list` fail (BUG-001, Low/Medium). Two QA tests that expose it are `#[ignore]`d with the bug id so the suite stays green. Verdict: partial (pass with one open defect).
+The skeleton builds, lints and runs. All five acceptance criteria are met in substance. The window renders the one FakeConnector container through the real Tauri command path (confirmed via WebView2 DevTools protocol and a screenshot). One defect was found (BUG-001, UTF-8 BOM) and has since been fixed by dev and re-verified. Verdict: pass.
 
 ## Test matrix
 
@@ -22,13 +22,13 @@ The skeleton builds, lints and runs. All five acceptance criteria are met in sub
 | AC4 injected fake runner | dev `wslc_connector_*`; QA args as separate args (spaces, quotes, `; rm -rf /`, empty, `--format`, 100k chars), non-zero/negative exit, runner Timeout propagation, non-UTF-8 and UTF-16LE stdout (no panic) | pass |
 | AC5 strings only in strings.ts | QA `ui_text_only_in_strings_module` (heuristic scan of main.ts, index.html title empty) | pass |
 | Parser: JSON lines, blank/CRLF, empty = empty list, unknown keys, missing keys, garbage -> ParseError, unknown state raw | dev tests plus QA: both real fixtures (running, exited + ports/labels), trailing line without newline, JSON array -> ParseError, scalar/null lines, wrong-typed value, null values, `{}`, duplicate keys (no panic), case-sensitive state, 1 MB name, non-ASCII, 20,000 rows, unicode escapes | pass |
-| Parser: BOM | `utf8_bom_prefixed_output_is_accepted`, `bom_only_is_empty_list` | FAIL, ignored (BUG-001) |
+| Parser: BOM | `utf8_bom_prefixed_output_is_accepted`, `bom_only_is_empty_list` | pass after fix (initially FAIL, BUG-001) |
 | Security: strict CSP, empty capabilities, no network, forbid(unsafe_code) | QA `qa_hygiene.rs` (csp_is_strict, capabilities_grant_no_permissions, frontend_has_no_network_calls_or_unsafe_dom, no_network_crates_in_dependencies, forbid_unsafe_...) | pass |
 | Hygiene | `gitignore_covers_build_output`, `no_personal_paths_in_sources_and_fixtures`, manual grep | pass |
 
 ## Commands run
 
-- `cargo test --workspace`: 46 passed, 0 failed, 2 ignored (BUG-001), including 1 doc test per crate that has one.
+- `cargo test --workspace`: initially 46 passed, 2 ignored (BUG-001); after the fix and the added BOM tests 51 passed, 0 failed, 0 ignored.
 - `cargo clippy --workspace --all-targets -- -D warnings`: no issues.
 - `cargo fmt --check`: clean.
 - `npm run build` (`tsc --noEmit && vite build`): ok, 6 modules, dist/index.html + 2.48 kB JS.
@@ -37,12 +37,20 @@ The skeleton builds, lints and runs. All five acceptance criteria are met in sub
 
 ## Defects
 
-### BUG-001 UTF-8 BOM in stdout makes the parser fail
+### BUG-001 UTF-8 BOM in stdout makes the parser fail (FIXED, verified)
 - Severity: Low (real `wslc` output is plain text without BOM per fixtures README; Medium if output is ever redirected through PowerShell or file capture, as the fixtures were).
 - Steps: `parse_container_list("\u{feff}{\"ID\":\"a\"}\r\n", &scope)`; also `"\u{feff}"` alone.
 - Expected: one container / empty list (the dev states BOM is handled; the fixtures README says to strip BOM and CRLF).
 - Actual: `Err(ParseError { raw })`. Cause: `str::trim` does not strip U+FEFF, and `String::from_utf8_lossy` keeps it.
 - Tests: `crates/engine/tests/qa_parse_edge.rs` (`utf8_bom_prefixed_output_is_accepted`, `bom_only_is_empty_list`), currently `#[ignore = "BUG-001 ..."]`. Remove the ignore when dev fixes it.
+
+## Re-verification of BUG-001
+
+Fix commit d4545a1 strips one leading U+FEFF from the whole stdout before line splitting; the error `raw` still holds the original stdout. Added tests: `bom_fix_does_not_hide_real_errors` (BOM + garbage, BOM mid-line, BOM at the start of a later line, double BOM, BOM before a JSON array: all still `ParseError`), `bom_with_blank_lines_is_empty_or_ok` (BOM + CRLF-only, BOM + blank lines, BOM + blank lines + object), `bom_parse_error_keeps_original_raw`. Results: `cargo test --workspace` 51 passed, 0 failed, 0 ignored; clippy `-D warnings` clean; `cargo fmt --check` clean; `npm run build` ok; no `#[ignore]` attribute remains under `crates/*/tests`.
+
+## Notes for later tickets
+
+- The fixtures README claim that `container-list.json` carries a BOM and CRLF is wrong: the stored file has neither. BOM handling is therefore covered only by synthetic tests; fix the README or re-capture the fixture.
 
 ## Observations (not defects)
 
@@ -60,4 +68,4 @@ The skeleton builds, lints and runs. All five acceptance criteria are met in sub
 
 ## Verdict
 
-Partial: functionally pass for REQ-000 acceptance criteria; BUG-001 open (BOM handling) and two tests ignored for it.
+Pass: all acceptance criteria met and BUG-001 fixed and verified. The unverified items above remain open.
