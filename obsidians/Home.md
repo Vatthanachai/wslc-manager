@@ -11,6 +11,8 @@ Windows desktop app (Rust, Tauri 2) to manage WSL containers (WSLC). Status: pla
 - [[ba-analysis]]: analysis, architecture, risks, phasing
 - [[decision-log]]: D1 to D15 in one place
 - [[unverified-items]]: what is still not proven
+- [[qa/README|QA]]: test strategy, integration convention, definition of done
+- [[pm/roadmap|Roadmap]]: estimates and critical path
 - [[requirements/README|Requirements index]]: tickets, order of implementation (in `requirements/`)
 - [[fixtures/README|Fixtures]]: real `wslc` and `wsl` output (WSL 3.0.5.0)
 - [[fixtures/errors/README|Error fixtures]]: exit codes and `WSLC_E_*` codes
@@ -31,6 +33,7 @@ Windows desktop app (Rust, Tauri 2) to manage WSL containers (WSLC). Status: pla
 | [[REQ-010-sessions-panel]] | Should |
 | [[REQ-011-container-stats]] | Should |
 | [[REQ-012-release-and-signing-pipeline]] | Should (before first public release) |
+| [[REQ-013-ci-and-qa-baseline]] | Must (before REQ-001) |
 
 ## Evidence labels
 Facts in the analysis carry a label: **[V]** verified on a real machine (WSL 3.0.5.0, 2026-11-11), **[R]** reported by a source or read from code but not run, **[U]** unverified or inferred.

@@ -25,10 +25,12 @@ Decisions in force
 | [REQ-010](REQ-010-sessions-panel.md) | Sessions panel | Should | WSLC | REQ-003, REQ-007 |
 | [REQ-011](REQ-011-container-stats.md) | Container stats | Should | WSLC | REQ-003 |
 | [REQ-012](REQ-012-release-and-signing-pipeline.md) | Release and signing pipeline (SignPath, MIT, public repo) | Should (post-MVP, before first public release) | n/a (build and release) | REQ-000, REQ-009 |
+| [REQ-013](REQ-013-ci-and-qa-baseline.md) | CI and QA baseline (test strategy, Vitest, GitHub Actions) | Must (before REQ-001) | n/a (test and CI) | REQ-000 |
 
 ## Suggested implementation order (walking skeleton first)
 
 1. REQ-000: Tauri shell + Rust core + `EngineConnector` trait + fake connector end to end, with the English string resource module in place.
+1b. REQ-013: CI and QA baseline (qa strategy and Definition of Done, Vitest, GitHub Actions checks), before any other ticket. Making its checks required on the `main` ruleset is a later owner step after the first successful run.
 2. REQ-001 and REQ-002: availability, versions (UTF-16LE decoding for `wsl.exe`, plain text for `wslc.exe`), sessions, capabilities.
 3. REQ-008 (typed errors) together with REQ-003 (list), using the existing fixtures.
 4. REQ-004, then REQ-007.
@@ -38,7 +40,7 @@ Decisions in force
 8. Should items: REQ-010, REQ-011 (can run in parallel with REQ-012).
 
 ## Deferred (not ticketed yet)
-Docker/Podman connector and its tickets (distro discovery, engine detection, list/lifecycle/logs/events/stats for Docker), images/volumes, exec, settings beyond the update check, i18n.
+Docker/Podman connector and its tickets (distro discovery, engine detection, list/lifecycle/logs/events/stats for Docker), images/volumes, exec, settings beyond the update check, i18n. Also not ticketed: real-`wslc` tests in CI (no wslc on GitHub runners, they stay local with `WSLC_INTEGRATION=1`), code coverage thresholds, and the owner step of adding the REQ-013 jobs as required checks on the `main` ruleset.
 
 ## Phase 0 results (verified, see `../fixtures/errors/README.md`)
 Captured: `wsl --version` and `wsl -l -v` (UTF-16LE), `wslc version`, failure fixtures for missing container/session/image and usage errors, an exited container with a published port. Used by REQ-001, REQ-002, REQ-003, REQ-004, REQ-008, REQ-010.
