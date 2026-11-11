@@ -34,6 +34,7 @@ Windows desktop app (Rust, Tauri 2) to manage WSL containers (WSLC). Status: pla
 | [[REQ-011-container-stats]] | Should |
 | [[REQ-012-release-and-signing-pipeline]] | Should (before first public release) |
 | [[REQ-013-ci-and-qa-baseline]] | Must (before REQ-001) |
+| [[REQ-014-switch-package-manager-to-bun]] | Must (before REQ-001) |
 
 ## Evidence labels
 Facts in the analysis carry a label: **[V]** verified on a real machine (WSL 3.0.5.0, 2026-11-11), **[R]** reported by a source or read from code but not run, **[U]** unverified or inferred.

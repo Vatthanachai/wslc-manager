@@ -26,11 +26,13 @@ Decisions in force
 | [REQ-011](REQ-011-container-stats.md) | Container stats | Should | WSLC | REQ-003 |
 | [REQ-012](REQ-012-release-and-signing-pipeline.md) | Release and signing pipeline (SignPath, MIT, public repo) | Should (post-MVP, before first public release) | n/a (build and release) | REQ-000, REQ-009 |
 | [REQ-013](REQ-013-ci-and-qa-baseline.md) | CI and QA baseline (test strategy, Vitest, GitHub Actions) | Must (before REQ-001) | n/a (test and CI) | REQ-000 |
+| [REQ-014](REQ-014-switch-package-manager-to-bun.md) | Switch the frontend package manager from npm to bun | Must (before REQ-001) | n/a (toolchain and CI) | REQ-013 |
 
 ## Suggested implementation order (walking skeleton first)
 
 1. REQ-000: Tauri shell + Rust core + `EngineConnector` trait + fake connector end to end, with the English string resource module in place.
 1b. REQ-013: CI and QA baseline (qa strategy and Definition of Done, Vitest, GitHub Actions checks), before any other ticket. Making its checks required on the `main` ruleset is a later owner step after the first successful run.
+1c. REQ-014: switch the frontend package manager from npm to bun (lockfile, pinned version, Tauri hooks, CI, living docs), right after REQ-013 and before REQ-001. The npm-based REQ-013 evidence is redone under bun.
 2. REQ-001 and REQ-002: availability, versions (UTF-16LE decoding for `wsl.exe`, plain text for `wslc.exe`), sessions, capabilities.
 3. REQ-008 (typed errors) together with REQ-003 (list), using the existing fixtures.
 4. REQ-004, then REQ-007.
