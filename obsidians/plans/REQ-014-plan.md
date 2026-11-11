@@ -45,8 +45,18 @@ Tauri CLI optional platform binary under bun on the runner [U] · bun and `befor
 - [x] T8 `ci.yml` with `setup-bun` (SHA verified), caching, order of steps, names unchanged. Validate YAML locally. (D)
 - [x] T9 Docs updates and the grep for `npm`/`npx` in living files; fresh-clone check in a scratch directory (`git clone` the local repo, follow the README only). (E)
 - [x] T10 Commit in small conventional commits ending with the Co-Authored-By line; do not push.
-- [ ] T11 (main assistant) push the branch, confirm CI green, run the five probes and the policy probes, delete probe branches/PRs, record in this plan.
+- [x] T11 (main assistant) push the branch, confirm CI green, run the five probes and the policy probes, delete probe branches/PRs, record in this plan.
 - [ ] T12 (`tester`) verify against the ticket and the QA Definition of Done; report in `obsidians/plans/REQ-014-test-report.md`.
 
 ## Definition of done
 Ticket criteria A to E met or explicitly pending; `tester` verdict pass; [[qa/definition-of-done]] met; CI green with the same job names; no `npm`/`npx` command in living files; no second lockfile; no personal data in any file; PR-only rule for `main` respected (D16).
+
+## T11 results (GitHub, 2026-11-11)
+
+- Run on `e566d2e` passed every step with bun 1.3.14 (`setup-bun` v2.2.0 pinned by SHA, `actions/cache` v6.1.0 pinned by SHA for `~/.bun/install/cache`). Check name still `ci-check`.
+- Five deliberate-failure probes each failed at the matching step: failing Rust test -> `cargo test`; clippy warning -> `cargo clippy`; formatting difference -> `cargo fmt --check`; failing Vitest test -> `bun run test`; TypeScript error -> `bun run build`. Probe branches deleted.
+- `branch-policy` probes through real PRs: feature -> `main` FAILED (runs `42990716363`), feature -> `develop` passed, `release/*` -> `main` passed. PRs closed unmerged and probe branches deleted (7 remote, 7 local). The shared-head-SHA caveat from [[REQ-013-plan]] still applies (PRs #5 and #6 share a head, so each shows both a FAILURE and a SUCCESS).
+
+## Correction found by dev (applies to the ticket text and D17)
+
+The ticket and D17 said bun resolves the esbuild warning because it does not run dependency lifecycle scripts. In fact bun 1.3.14 has esbuild on its default-trusted list (`bun pm default-trusted`), so esbuild's `postinstall` does run and `bun pm untrusted` reports 0 untrusted dependencies with scripts. The warning is gone because esbuild is trusted by default, not because scripts are blocked. `trustedDependencies` stays absent. Vitest cannot run without Node (fails with an EventTarget error in its worker, also under `bun --bun`), so Node 24 stays a prerequisite and `.nvmrc`, `engines.node` and `setup-node` stay (decision 1 of this plan, now settled by experiment).
