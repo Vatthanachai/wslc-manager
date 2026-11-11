@@ -30,6 +30,9 @@ struct RawContainer {
 /// ```
 pub fn parse_container_list(stdout: &str, scope: &Scope) -> Result<Vec<Container>, AppError> {
     stdout
+        // Strip one leading UTF-8 BOM; `trim` does not remove U+FEFF.
+        .strip_prefix('\u{feff}')
+        .unwrap_or(stdout)
         .lines()
         .map(str::trim)
         .filter(|l| !l.is_empty())

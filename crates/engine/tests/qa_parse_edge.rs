@@ -58,7 +58,6 @@ fn both_fixtures_concatenated_give_two_rows() {
 }
 
 #[test]
-#[ignore = "BUG-001 parse_container_list rejects a leading UTF-8 BOM (U+FEFF is not trimmed)"]
 fn utf8_bom_prefixed_output_is_accepted() {
     // The fixtures README says files carry a BOM; the dev claims BOM is handled.
     let text = "\u{feff}{\"ID\":\"a\",\"Names\":\"n\",\"State\":\"running\"}\r\n";
@@ -67,7 +66,6 @@ fn utf8_bom_prefixed_output_is_accepted() {
 }
 
 #[test]
-#[ignore = "BUG-001 parse_container_list rejects a BOM-only output"]
 fn bom_only_is_empty_list() {
     assert!(parse_container_list("\u{feff}", &scope())
         .unwrap()
