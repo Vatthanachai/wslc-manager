@@ -23,11 +23,11 @@ Source of truth for details: [[ba-analysis]] section 3. This page is the quick v
 | D13 | UI language: English only, strings in one resource module, no i18n in MVP | Decided | [[REQ-000-walking-skeleton]] |
 | D14 | Windows 10 is not supported | Decided | |
 | D15 | Code signing via SignPath Foundation, MIT licence, public GitHub repo. Apply after a first release exists | Decided | [[REQ-012-release-and-signing-pipeline]] |
-
 | D16 | Changes reach `main` only through a pull request (GitHub ruleset "main: pull request only", id 27014559, created 2026-11-11: PR required, merge commits only, conversations resolved, no direct push, no deletion, no force-push, no bypass actors, 0 required approvals because the project has one owner) | Decided | [[REQ-012-release-and-signing-pipeline]] |
+| D17 | Frontend package manager is bun, replacing npm (owner decision 2026-11-11). Done as REQ-014 after REQ-013 closed with npm. Resolves the esbuild install-scripts warning (bun does not run dependency scripts unless trusted) and the npm 11/12 mismatch between CI and local | Decided | [[REQ-014-switch-package-manager-to-bun]] |
 
 ## Repository
-- Remote: `https://github.com/Vatthanachai/wslc-manager.git` (not pushed yet).
+- Remote: `https://github.com/Vatthanachai/wslc-manager.git` (public; `main` is PR-only, see D16).
 - Branching: git flow (`main`, `develop`, `feature/*`, `bugfix/*`, `release/*`, `hotfix/*`).
 
 Back to [[Home]].
