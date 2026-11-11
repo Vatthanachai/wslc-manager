@@ -1,6 +1,6 @@
 # wslc error fixtures
 
-Captured 2026-11-11 on WSL 3.0.5.0 / wslc 3.0.5.0 (session `wslc-cli-<user>`). Each `*.txt` holds COMMAND, EXIT, STDOUT and STDERR (UTF-8, no BOM). Related fixtures one level up: `wsl-version.utf16.txt`, `wsl-list-verbose.utf16.txt` (raw `cmd /c` redirect, UTF-16LE with BOM), `container-list-exited-ports.json`.
+Captured 2026-11-11 on WSL 3.0.5.0 / wslc 3.0.5.0 (session `wslc-cli-<user>`). Each `*.txt` holds COMMAND, EXIT, STDOUT and STDERR (UTF-8, no BOM, CRLF line endings). Related fixtures one level up: `wsl-version.utf16.txt`, `wsl-list-verbose.utf16.txt` (raw `cmd /c` redirect, UTF-16LE, no BOM), `container-list-exited-ports.json`.
 
 ## Verified (observed)
 

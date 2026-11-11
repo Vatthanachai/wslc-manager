@@ -71,7 +71,7 @@ Source: `obsidians/fixtures/` (files named per row).
 | Events | `system events --format json` streams (events arrived while the command was still running). JSON lines with Action, Actor{Attributes,ID}, Type (`container`, `network`), `from`, `id`, `scope`, `status`, `time`, `timeNano`. Network events have no `from`/`id`/`status`. A restart produced: kill (signal 15), kill (signal 9), network disconnect, die (exitCode 137), stop, network connect, start | events.jsonl |
 | Logs | `container logs --follow` streams. `-t` prefixes an RFC3339Nano timestamp (for example `2026-11-11T07:09:54.459090506Z tick 11`). `--tail N` works | container-logs-tail.txt, container-logs-follow-sample.txt |
 | Timing | `container restart` took about 10 s because PID 1 (`sh`) ignored SIGTERM and wslc killed it after the default timeout | events.jsonl |
-| Encoding | `wsl --version` and `wsl -l` output is UTF-16LE. `wslc` output is plain text. Fixture files carry BOM and CRLF from PowerShell, so tests must strip both | README.md |
+| Encoding | `wsl --version` and `wsl -l` output is UTF-16LE. `wslc` output is plain text. Fixture files have CRLF line endings and no BOM (checked 2026-11-11), so tests must strip the trailing CR; BOM handling needs synthetic tests | README.md |
 
 Still unverified [U]
 - Whether containers created by the C SDK appear in the CLI, and the reverse.
@@ -139,7 +139,7 @@ Infrastructure: WSL/wslc availability + version check, shared Process runner, Ev
 ### WslcCliConnector design
 
 Parsing rules
-- Strip BOM and CRLF in tests (fixtures carry them). Production output of `wslc` is plain text [V], so decode as UTF-8.
+- Strip CR (fixtures have CRLF) in tests, and cover BOM with synthetic input (no fixture has one). Production output of `wslc` is plain text [V], so decode as UTF-8.
 - `wsl.exe` output (`--version`, `-l`) is UTF-16LE [V]. Use a separate decoder.
 - JSON lines: split on newlines, skip blank lines, parse each line as one object. Empty output means an empty list, not an error [V].
 - `container inspect` is a JSON array [V], so use a different parser from the JSON-lines commands.

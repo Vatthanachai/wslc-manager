@@ -30,7 +30,7 @@ As a developer, I want to read and follow a container's logs so that I can debug
 - Given output encoding, then `wslc` output is decoded as plain text [V].
 
 ## Fixtures
-- `obsidians/fixtures/container-logs-tail.txt`, `obsidians/fixtures/container-logs-follow-sample.txt` (strip BOM and CRLF).
+- `obsidians/fixtures/container-logs-tail.txt`, `obsidians/fixtures/container-logs-follow-sample.txt` (strip CR; the files have CRLF line endings).
 
 ## Out of scope
 - Search within logs, download/export, stdout/stderr separation, `--since`/`--until` filters.

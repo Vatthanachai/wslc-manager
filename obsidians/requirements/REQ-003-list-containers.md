@@ -39,7 +39,7 @@ As a developer, I want one table of containers across WSLC sessions so that I ca
 ## Fixtures
 - `obsidians/fixtures/container-list-exited-ports.json` (exited container with a published port and user labels, the Ports-from-Labels case).
 - `obsidians/fixtures/errors/container-list-bad-session.txt` (failure case for an unknown session), `container-list-bad-format.txt`.
-- `obsidians/fixtures/container-list.json` (note BOM and CRLF are stripped in tests, and the fixture is a single line. Add a synthetic empty-output case and a multi-line case in tests).
+- `obsidians/fixtures/container-list.json` (note the fixture has CRLF and no BOM, and is a single line; strip CR in tests and cover BOM synthetically. Add a synthetic empty-output case and a multi-line case in tests).
 
 ## Out of scope
 - Docker/Podman containers and distro filters (deferred), stats columns (REQ-011), inspect detail view, images and volumes lists, sorting persistence.

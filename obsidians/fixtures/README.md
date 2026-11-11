@@ -2,7 +2,7 @@
 
 Captured 2026-11-11 on WSL 3.0.5.0 / wslc 3.0.5.0, Windows 10.0.26300, session `wslc-cli-<user>` (the Windows user name is replaced by `<user>` in all fixtures).
 Container: `alpine:latest` running a 1-second tick loop (`aiyara-spike`, removed after capture).
-Files were written with PowerShell `Out-File -Encoding utf8` (so they carry a BOM and CRLF); strip both in tests.
+Files were written on Windows. Checked on 2026-11-11: none has a UTF-8 BOM, all carry CRLF line endings, and the two `wsl-*.utf16.txt` files are UTF-16LE without a BOM. Tests must strip the trailing CR. BOM handling is covered only by synthetic tests (real `wslc` output is plain text).
 
 | File | Command |
 |------|---------|
