@@ -74,6 +74,37 @@ To release or hotfix:
 
 Work follows the order in [`obsidians/requirements/README.md`](obsidians/requirements/README.md), starting with the walking skeleton.
 
+## Local checks
+
+The GitHub Actions workflow `ci` (job `ci-check`, on `windows-latest`) runs exactly these commands, in this order. Run them locally before opening a pull request. Node 24 is pinned in `.nvmrc`.
+
+```bash
+cargo fmt --check
+cargo clippy --workspace --all-targets -- -D warnings
+cargo test --workspace
+npm ci
+npm run build
+npm test
+```
+
+`npm test` runs Vitest once (jsdom, no watch mode) and needs no Tauri, WebView2, Rust or WSL. The workflow `branch-policy` (job `branch-policy`) only allows pull requests into `main` from `develop`, `release/*` and `hotfix/*`.
+
+Test strategy, Definition of Done and the integration-test convention are in [`obsidians/qa/`](obsidians/qa/README.md): [test strategy](obsidians/qa/test-strategy.md), [definition of done](obsidians/qa/definition-of-done.md), [integration convention](obsidians/qa/qa-integration-convention.md).
+
+### Integration tests (real `wslc.exe`)
+
+Tests that call the real `wslc.exe` live in `crates/engine/tests/wslc_integration.rs` (helpers in `crates/engine/tests/support/`). They are `#[ignore]` by default, so `cargo test --workspace` lists them as ignored and starts no `wslc.exe`. They never run in CI. To run them on your own machine:
+
+```bash
+WSLC_INTEGRATION=1 cargo test -p aiyara-engine --test wslc_integration -- --ignored --test-threads=1
+```
+
+Rules (details in the convention above):
+
+- Every resource a test creates is named `aiyara-test-<suffix>`. A test never starts, stops, removes or changes anything without that prefix.
+- A drop guard removes what the test created, also when an assertion fails. A startup sweep removes leftovers with the prefix from crashed runs.
+- Cleanup of leftovers by hand: `wslc container list --all` and remove only the entries whose name starts with `aiyara-test-`, for example `wslc container remove --force <name>`.
+
 ## Contributing
 
 Not open for contributions yet. Open an issue to discuss before sending a pull request.
