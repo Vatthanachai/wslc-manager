@@ -1,0 +1,7 @@
+# Normalise text to LF in the repository and on checkout.
+* text=auto eol=lf
+
+# Captured tool output: keep the exact bytes (BOM, CRLF, UTF-16LE) because tests rely on them.
+obsidians/fixtures/** -text
+obsidians/fixtures/**/README.md text eol=lf
+obsidians/fixtures/README.md text eol=lf
