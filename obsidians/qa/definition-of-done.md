@@ -13,8 +13,8 @@ Applies to every ticket in [[README|requirements index]] before `git flow featur
 ## 1. Checklist
 
 - [ ] Each acceptance criterion is mapped to a test (name in the report) or to a recorded manual check (who, when, machine, result).
-- [ ] `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace --all-targets` and `cargo test --doc` pass.
-- [ ] `bun run build` and `bun run test` pass (frontend runner from [[REQ-013-ci-and-qa-baseline]], package manager from [[REQ-014-switch-package-manager-to-bun]]). Never `bun test`.
+- [ ] `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings` and `cargo test --workspace` pass. These are the commands CI runs. `--workspace` covers every crate's unit, integration and doc tests; `#[ignore]` tests are listed as ignored, not run. No separate `--all-targets` or `--doc` run is needed (details: [[ci-and-toolchain]]).
+- [ ] `bun install --frozen-lockfile`, `bun run build` and `bun run test` pass (frontend runner from [[REQ-013-ci-and-qa-baseline]], package manager from [[REQ-014-switch-package-manager-to-bun]]; Node 24 is needed because Vitest runs on Node). Never `bun test`.
 - [ ] Tester report `obsidians/plans/REQ-NNN-test-report.md` exists with verdict pass and no open defect above Low. Each open Low defect is listed with an owner decision (accept, fix later with ticket id).
 - [ ] Every new [V] fact has a fixture (captured per [[test-strategy]] section 6) and a contract test, and is recorded in [[ba-analysis]].
 - [ ] Unverified [U] items the ticket depends on are listed in the report and in [[unverified-items]], each with a spike result or a marked pending manual check.

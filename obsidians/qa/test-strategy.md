@@ -10,7 +10,7 @@ updated: 2026-11-11
 
 Context: [[ba-analysis]] (evidence labels [V]/[R]/[U], error mapping, performance targets), [[unverified-items]], [[decision-log]], [[REQ-013-ci-and-qa-baseline]], fixtures in `obsidians/fixtures/` (see its README and `errors/README.md`). Walking-skeleton results: [[REQ-000-test-report]].
 
-Assumptions (marked A): CI is a GitHub-hosted `windows-latest` runner with no WSL and no `wslc.exe` (A, to be confirmed in REQ-013). The frontend runner is Vitest (REQ-013). The MVP is WSLC only (D1/D2), Windows 11 only (D14).
+Assumptions (marked A): CI is a GitHub-hosted `windows-latest` runner with no WSL and no `wslc.exe` (A: the workflow runs green without them, but the absence of `wslc.exe` on the image was not checked). The frontend runner is Vitest (REQ-013), run through bun (REQ-014). The MVP is WSLC only (D1/D2), Windows 11 only (D14).
 
 ## 1. Levels and what belongs where
 
@@ -53,7 +53,7 @@ Measure at least 10 runs, report median and worst, with machine, WSL and wslc ve
 
 ## 5. CI versus local
 
-CI (GitHub-hosted Windows, no wslc): `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace --all-targets` and `--doc`, `bun install --frozen-lockfile`, `bun run build`, `bun run test` (never `bun test`: it is bun's own runner and ignores `vitest.config.ts`). `#[ignore]` tests are listed but not run. Local only: L5 to L8. Changes to CI or caching need their own ticket ([[REQ-013-ci-and-qa-baseline]], [[REQ-012-release-and-signing-pipeline]]).
+CI (GitHub-hosted `windows-latest`, no wslc), job `ci-check`, in this order: `cargo fmt --check`, `cargo clippy --workspace --all-targets -- -D warnings`, `cargo test --workspace` (all crates: unit, integration and doc tests), `bun install --frozen-lockfile`, `bun run build`, `bun run test` (never `bun test`: it is bun's own runner and ignores `vitest.config.ts`; a guard in `bunfig.toml` refuses it). Rust comes from `rust-toolchain.toml` (1.99.1), bun is 1.3.14, Node 24 is installed because Vitest runs on Node. `#[ignore]` tests are listed but not run. A second job, `branch-policy`, checks the head branch of pull requests into `main` (D16). Workflow, pins, caches and caveats: [[ci-and-toolchain]]. Local only: L5 to L8. Changes to CI or caching need their own ticket ([[REQ-013-ci-and-qa-baseline]], [[REQ-012-release-and-signing-pipeline]]).
 
 ## 6. Fixture capture procedure
 

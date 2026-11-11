@@ -9,7 +9,7 @@ updated: 2026-11-11
 
 # Real wslc integration-test convention
 
-Level L6 in [[test-strategy]]. Facts about wslc: [[ba-analysis]] section 4. These tests touch the user's real WSL, so they are opt-in and defensive. Never run them in CI (A: no wslc there).
+Level L6 in [[test-strategy]]. Facts about wslc: [[ba-analysis]] section 4. These tests touch the user's real WSL, so they are opt-in and defensive. Never run them in CI (A: no wslc there; the `ci-check` job runs `cargo test --workspace` without the env var, so they are listed as ignored). CI facts: [[ci-and-toolchain]].
 
 ## Rules
 

@@ -10,30 +10,32 @@ Decisions in force
 - D14: Windows 11 only, Windows 10 is not supported.
 - D15: code signing via SignPath Foundation (free OSS programme), MIT licence, public GitHub repo (REQ-012).
 
-| ID | Title | Priority | Connector scope | Depends on |
-|----|-------|----------|-----------------|------------|
-| [REQ-000](REQ-000-walking-skeleton.md) | Walking skeleton | Must | WSLC (fake connector) | none |
-| [REQ-001](REQ-001-discover-runtimes.md) | WSL/wslc availability, version, sessions | Must | WSLC | REQ-000 |
-| [REQ-002](REQ-002-detect-engine.md) | WSLC capabilities by version | Must | WSLC | REQ-001 |
-| [REQ-003](REQ-003-list-containers.md) | List containers | Must | WSLC | REQ-002, REQ-008 |
-| [REQ-004](REQ-004-container-lifecycle.md) | Start, stop, restart | Must | WSLC | REQ-003 |
-| [REQ-005](REQ-005-container-logs.md) | View logs with follow and tail | Must | WSLC | REQ-003 |
-| [REQ-006](REQ-006-live-updates.md) | Live status updates | Must | WSLC | REQ-003 |
-| [REQ-007](REQ-007-safe-destructive-actions.md) | Safe destructive actions | Must | WSLC | REQ-004 |
-| [REQ-008](REQ-008-error-handling.md) | Error handling and states | Must | WSLC | REQ-001 (refined throughout) |
-| [REQ-009](REQ-009-wsl-update-check.md) | WSL update check (D11) | Must | WSLC (concerns WSL itself) | REQ-001, REQ-002 |
-| [REQ-010](REQ-010-sessions-panel.md) | Sessions panel | Should | WSLC | REQ-003, REQ-007 |
-| [REQ-011](REQ-011-container-stats.md) | Container stats | Should | WSLC | REQ-003 |
-| [REQ-012](REQ-012-release-and-signing-pipeline.md) | Release and signing pipeline (SignPath, MIT, public repo) | Should (post-MVP, before first public release) | n/a (build and release) | REQ-000, REQ-009 |
-| [REQ-013](REQ-013-ci-and-qa-baseline.md) | CI and QA baseline (test strategy, Vitest, GitHub Actions) | Must (before REQ-001) | n/a (test and CI) | REQ-000 |
-| [REQ-014](REQ-014-switch-package-manager-to-bun.md) | Switch the frontend package manager from npm to bun | Must (before REQ-001) | n/a (toolchain and CI) | REQ-013 |
+| ID | Title | Priority | Connector scope | Depends on | Status |
+|----|-------|----------|-----------------|------------|--------|
+| [REQ-000](REQ-000-walking-skeleton.md) | Walking skeleton | Must | WSLC (fake connector) | none | done |
+| [REQ-001](REQ-001-discover-runtimes.md) | WSL/wslc availability, version, sessions | Must | WSLC | REQ-000 | todo (next) |
+| [REQ-002](REQ-002-detect-engine.md) | WSLC capabilities by version | Must | WSLC | REQ-001 | todo |
+| [REQ-003](REQ-003-list-containers.md) | List containers | Must | WSLC | REQ-002, REQ-008 | todo |
+| [REQ-004](REQ-004-container-lifecycle.md) | Start, stop, restart | Must | WSLC | REQ-003 | todo |
+| [REQ-005](REQ-005-container-logs.md) | View logs with follow and tail | Must | WSLC | REQ-003 | todo |
+| [REQ-006](REQ-006-live-updates.md) | Live status updates | Must | WSLC | REQ-003 | todo |
+| [REQ-007](REQ-007-safe-destructive-actions.md) | Safe destructive actions | Must | WSLC | REQ-004 | todo |
+| [REQ-008](REQ-008-error-handling.md) | Error handling and states | Must | WSLC | REQ-001 (refined throughout) | todo |
+| [REQ-009](REQ-009-wsl-update-check.md) | WSL update check (D11) | Must | WSLC (concerns WSL itself) | REQ-001, REQ-002 | todo |
+| [REQ-010](REQ-010-sessions-panel.md) | Sessions panel | Should | WSLC | REQ-003, REQ-007 | todo |
+| [REQ-011](REQ-011-container-stats.md) | Container stats | Should | WSLC | REQ-003 | todo |
+| [REQ-012](REQ-012-release-and-signing-pipeline.md) | Release and signing pipeline (SignPath, MIT, public repo) | Should (post-MVP, before first public release) | n/a (build and release) | REQ-000, REQ-009 | todo |
+| [REQ-013](REQ-013-ci-and-qa-baseline.md) | CI and QA baseline (test strategy, Vitest, GitHub Actions) | Must (before REQ-001) | n/a (test and CI) | REQ-000 | done |
+| [REQ-014](REQ-014-switch-package-manager-to-bun.md) | Switch the frontend package manager from npm to bun | Must (before REQ-001) | n/a (toolchain and CI) | REQ-013 | done |
+
+Status mirrors each ticket's frontmatter `status`. REQ-000, REQ-013 and REQ-014 are done and merged into `develop` (not yet pushed as of 2026-11-11). Next up: REQ-001.
 
 ## Suggested implementation order (walking skeleton first)
 
-1. REQ-000: Tauri shell + Rust core + `EngineConnector` trait + fake connector end to end, with the English string resource module in place.
-1b. REQ-013: CI and QA baseline (qa strategy and Definition of Done, Vitest, GitHub Actions checks), before any other ticket. Making its checks required on the `main` ruleset is a later owner step after the first successful run.
-1c. REQ-014: switch the frontend package manager from npm to bun (lockfile, pinned version, Tauri hooks, CI, living docs), right after REQ-013 and before REQ-001. The npm-based REQ-013 evidence is redone under bun.
-2. REQ-001 and REQ-002: availability, versions (UTF-16LE decoding for `wsl.exe`, plain text for `wslc.exe`), sessions, capabilities.
+1. REQ-000 (DONE): Tauri shell + Rust core + `EngineConnector` trait + fake connector end to end, with the English string resource module in place.
+1b. REQ-013 (DONE): CI and QA baseline (qa strategy and Definition of Done, Vitest, GitHub Actions checks), before any other ticket. Making its checks required on the `main` ruleset is a later owner step after the first successful run. Reference: [[qa/ci-and-toolchain]].
+1c. REQ-014 (DONE): switch the frontend package manager from npm to bun (lockfile, pinned version, Tauri hooks, CI, living docs), right after REQ-013 and before REQ-001. The npm-based REQ-013 evidence is redone under bun.
+2. REQ-001 and REQ-002 (NEXT, REQ-001 first, then REQ-002; REQ-008 follows in step 3): availability, versions (UTF-16LE decoding for `wsl.exe`, plain text for `wslc.exe`), sessions, capabilities.
 3. REQ-008 (typed errors) together with REQ-003 (list), using the existing fixtures.
 4. REQ-004, then REQ-007.
 5. REQ-006 (events with polling fallback), then REQ-005 (logs).
