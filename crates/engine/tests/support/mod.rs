@@ -154,7 +154,8 @@ pub fn wsl(args: &[&str], timeout: Duration) -> Result<Out, String> {
 /// Decodes UTF-16LE bytes (with or without BOM), as printed by `wsl.exe`.
 pub fn decode_utf16le(bytes: &[u8]) -> String {
     let units: Vec<u16> = bytes
-        .chunks_exact(2)
+        .chunks(2)
+        .filter(|c| c.len() == 2) // an odd trailing byte is dropped
         .map(|c| u16::from_le_bytes([c[0], c[1]]))
         .collect();
     String::from_utf16_lossy(&units)

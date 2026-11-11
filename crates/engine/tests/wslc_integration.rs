@@ -139,6 +139,13 @@ fn decodes_utf16le_with_and_without_bom() {
 }
 
 #[test]
+fn utf16le_decode_drops_an_odd_trailing_byte() {
+    assert_eq!(decode_utf16le(&[b'a', 0, b'b', 0, 0xff]), "ab");
+    assert_eq!(decode_utf16le(&[0xff]), "");
+    assert_eq!(decode_utf16le(&[]), "");
+}
+
+#[test]
 fn ignore_reason_matches_the_convention() {
     assert_eq!(
         IGNORE_REASON,
