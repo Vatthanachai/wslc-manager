@@ -4,6 +4,8 @@ name: branch-policy
 # Pull requests into any other branch pass. No path filters, no secrets.
 on:
   pull_request:
+    # `edited` fires when the base branch of a PR is changed.
+    types: [opened, synchronize, reopened, edited]
     branches: [develop, main]
 
 permissions:
