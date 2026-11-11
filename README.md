@@ -140,7 +140,7 @@ git flow feature finish REQ-001-discover-runtimes
 
 `main` is protected by a GitHub ruleset ("main: pull request only"): nobody, including the owner, can push to `main` directly, delete it or force-push it. The only way in is a pull request, merged with a merge commit, with all review conversations resolved. `develop` and the topic branches are not protected, so `git flow feature finish` into `develop` still works locally.
 
-The `branch-policy` job additionally fails a pull request into `main` whose head is not `develop`, `release/*` or `hotfix/*`. The `ci-check` and `branch-policy` jobs are not yet required status checks on the ruleset (owner step, planned after the first green pull request into `main`; TBC).
+The `branch-policy` job additionally fails a pull request into `main` whose head is not `develop`, `release/*` or `hotfix/*`. Both `ci-check` and `branch-policy` are required status checks on the `main` ruleset (D19), so a pull request into `main` cannot be merged until both are green. The job names are frozen for that reason: renaming a job means updating the ruleset first.
 
 To release or hotfix:
 
