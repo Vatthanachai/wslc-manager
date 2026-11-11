@@ -1,6 +1,6 @@
 ---
 ticket: REQ-014
-status: partial
+status: pass
 tags:
   - test-report
 ---
@@ -103,7 +103,7 @@ Action pins checked with `gh api repos/<o>/<r>/git/ref/tags/<tag>`:
 
 ## 4. Defects
 
-### BUG-001 Ticket file is not finished (OPEN)
+### BUG-001 Ticket file is not finished (FIXED, verified in section 9)
 - Ticket: REQ-014   Severity: Medium   Found: 2026-11-11
 - Environment: branch head `2ce4036`, docs only.
 - Steps: open `obsidians/requirements/REQ-014-switch-package-manager-to-bun.md`; read the frontmatter, the "Open questions" section and lines 25 to 39.
@@ -112,7 +112,7 @@ Action pins checked with `gh api repos/<o>/<r>/git/ref/tags/<tag>`:
 - Cause: documentation step not done.
 - Owner decision: not applicable (Medium blocks). Fix: answer the open questions from the plan, drop the "[U, confirm]" on esbuild, set the ticket status, add a line recording the unchanged job names. No code needed. Re-verification is a read of those lines.
 
-### BUG-002 Merge conflict with `develop` in `obsidians/decision-log.md` (OPEN)
+### BUG-002 Merge conflict with `develop` in `obsidians/decision-log.md` (FIXED, verified in section 9)
 - Ticket: REQ-014   Severity: Low   Found: 2026-11-11
 - Environment: `develop` at `a78e9da` (two commits ahead of the merge base `495e589`: `c1a0c4e`, `a78e9da`, docs for the UX batch), branch head `2ce4036`.
 - Steps: `git merge-tree --write-tree develop HEAD`.
@@ -155,7 +155,7 @@ No new tests were added: the existing 17 tests plus the recorded mutations cover
 
 ## 8. Verdict
 
-**Partial.** All acceptance criteria that can be checked before a pull request are met, and no code defect was found. Blocking: BUG-001 (Medium, documentation of the ticket). Open Low: BUG-002, BUG-003. After BUG-001 is fixed and the conflict is handled at merge, the verdict becomes pass without re-running the technical checks (no code or workflow change is needed); a re-read of the ticket lines is enough.
+**Initial verdict: partial.** All acceptance criteria that can be checked before a pull request are met, and no code defect was found. Blocking: BUG-001 (Medium, documentation of the ticket). Open Low: BUG-002, BUG-003. After BUG-001 is fixed and the conflict is handled at merge, the verdict becomes pass without re-running the technical checks (no code or workflow change is needed); a re-read of the ticket lines is enough.
 
 Owner decisions:
 
@@ -166,3 +166,12 @@ Owner decisions:
 | BUG-003 | Low | Accept the noisy `bun test` refusal |
 | O2 | n/a | Accept two hand-edited places for the bun version, or add a CI check later |
 | Pending | n/a | Do the "recorded in the PR" items when the pull request is opened; a second-machine fresh clone is optional |
+
+## 9. Re-verification (head `805c8a0`, merge commit `41453ca`, 2026-11-11)
+
+**Final verdict: pass.** No defect above Low remains. Open Low items: BUG-003 (accepted in the ticket's result record per the BA) and the unverified list in section 7, unchanged.
+
+- BUG-001 fixed. Ticket frontmatter `status: done`. Open questions 1 to 6 are all answered (Node kept with the EventTarget reason, version pin in `packageManager` plus `ci.yml`, no `trustedDependencies`, Vitest on Node, `bunfig.toml` preload guard, no stray-lockfile check). The "[U, confirm]" on esbuild (ticket line 41) now reads "[V, `bun pm default-trusted`; `bun pm untrusted` reports 0]. Result: no `trustedDependencies` exists". The "Result record" (line 28) states that `ci-check` and `branch-policy` did not change. Plan frontmatter `status: done`; T12 ticked by me. The one remaining "[U, confirm for 1.3.14]" (line 82, `bun.lock` text format) is now confirmed by this report (text `lockfileVersion` 1) and is cosmetic.
+- BUG-002 fixed. `git merge-tree --write-tree develop HEAD` prints one tree id, exit 0, no conflict. `decision-log.md` has D15, D16, D17, D18 in one table (lines 25 to 28); D17 says esbuild is on bun's default-trusted list.
+- Branch content: `git diff develop..HEAD --stat -- src crates src-tauri/src` is empty. `git diff 99cf158 41453ca --stat` shows only the seven files that came from `develop` (Home.md, decision-log.md, design note, REQ-001, REQ-002, REQ-008, unverified-items.md); no Rust, workflow, package or lock file.
+- Commands, after `rm -rf node_modules dist`: `bun install --frozen-lockfile` 65 packages, exit 0; `bun run build` exit 0; `bun run test` 2 files, 17 passed; `cargo fmt --check` exit 0. Full clippy and cargo test were not repeated, since the merge touched no Rust file.

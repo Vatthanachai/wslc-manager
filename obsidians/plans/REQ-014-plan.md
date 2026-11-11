@@ -46,7 +46,7 @@ Tauri CLI optional platform binary under bun on the runner [U] · bun and `befor
 - [x] T9 Docs updates and the grep for `npm`/`npx` in living files; fresh-clone check in a scratch directory (`git clone` the local repo, follow the README only). (E)
 - [x] T10 Commit in small conventional commits ending with the Co-Authored-By line; do not push.
 - [x] T11 (main assistant) push the branch, confirm CI green, run the five probes and the policy probes, delete probe branches/PRs, record in this plan.
-- [ ] T12 (`tester`) verify against the ticket and the QA Definition of Done; report in `obsidians/plans/REQ-014-test-report.md`.
+- [x] T12 (`tester`) verify against the ticket and the QA Definition of Done; report in `obsidians/plans/REQ-014-test-report.md`.
 
 ## Definition of done
 Ticket criteria A to E met or explicitly pending; `tester` verdict pass; [[qa/definition-of-done]] met; CI green with the same job names; no `npm`/`npx` command in living files; no second lockfile; no personal data in any file; PR-only rule for `main` respected (D16).
