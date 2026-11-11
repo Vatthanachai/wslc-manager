@@ -3,7 +3,7 @@ id: REQ-013
 title: "CI and QA baseline"
 priority: Must
 connector: n/a
-status: todo
+status: done
 depends_on:
   - "[[REQ-000-walking-skeleton]]"
 tags:
