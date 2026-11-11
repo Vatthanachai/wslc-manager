@@ -62,6 +62,16 @@ git flow feature start REQ-000-walking-skeleton
 git flow feature finish REQ-000-walking-skeleton
 ```
 
+### Merging into `main`: pull request only
+
+`main` is protected by a GitHub ruleset ("main: pull request only"): nobody, including the owner, can push to `main` directly, delete it or force-push it. The only way in is a pull request, merged with a merge commit, with all review conversations resolved. `develop` and the topic branches are not protected, so `git flow feature finish` into `develop` still works locally.
+
+To release or hotfix:
+
+1. `git flow release start <version>` (or `hotfix start`), then push the branch: `git push -u origin release/<version>`.
+2. Open a pull request from that branch (or from `develop`) into `main` and merge it on GitHub.
+3. Do **not** run `git flow release finish` / `hotfix finish` locally: it merges into `main` on your machine and the push would be rejected. After the PR is merged, tag the merge commit on `main`, then merge `main` back into `develop` and push.
+
 Work follows the order in [`obsidians/requirements/README.md`](obsidians/requirements/README.md), starting with the walking skeleton.
 
 ## Contributing

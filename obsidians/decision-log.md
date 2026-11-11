@@ -24,6 +24,8 @@ Source of truth for details: [[ba-analysis]] section 3. This page is the quick v
 | D14 | Windows 10 is not supported | Decided | |
 | D15 | Code signing via SignPath Foundation, MIT licence, public GitHub repo. Apply after a first release exists | Decided | [[REQ-012-release-and-signing-pipeline]] |
 
+| D16 | Changes reach `main` only through a pull request (GitHub ruleset "main: pull request only", id 27014559, created 2026-11-11: PR required, merge commits only, conversations resolved, no direct push, no deletion, no force-push, no bypass actors, 0 required approvals because the project has one owner) | Decided | [[REQ-012-release-and-signing-pipeline]] |
+
 ## Repository
 - Remote: `https://github.com/Vatthanachai/wslc-manager.git` (not pushed yet).
 - Branching: git flow (`main`, `develop`, `feature/*`, `bugfix/*`, `release/*`, `hotfix/*`).
