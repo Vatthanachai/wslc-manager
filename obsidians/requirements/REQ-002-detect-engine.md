@@ -31,5 +31,8 @@ As a user, I want the app to enable only the features my installed WSLC version 
 ## Fixtures
 - `obsidians/fixtures/README.md` (tested baseline 3.0.5.0). `obsidians/fixtures/errors/wslc-version.txt` (`wslc 3.0.5.0`), `obsidians/fixtures/wsl-version.utf16.txt`.
 
+## Definition of done
+- This ticket is done only when the checklist in [[qa/definition-of-done]] is met.
+
 ## Out of scope
 - Docker/Podman engine detection, switching engines, Docker Desktop specifics (deferred).

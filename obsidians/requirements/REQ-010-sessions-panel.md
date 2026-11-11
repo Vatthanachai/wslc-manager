@@ -36,5 +36,8 @@ As an operator, I want to see the WSLC sessions and be able to stop one so that 
 - `obsidians/fixtures/errors/session-terminate-missing.txt`.
 - `obsidians/fixtures/session-list-verbose.txt` (one session, ID 1, Creator PID 40580, Display Name `wslc-cli-<user>`). Need: a two-session capture and an empty capture.
 
+## Definition of done
+- This ticket is done only when the checklist in [[qa/definition-of-done]] is met.
+
 ## Out of scope
 - Creating sessions, renaming sessions, session persistence after exit/logoff/reboot (unverified [U]), C SDK sessions.

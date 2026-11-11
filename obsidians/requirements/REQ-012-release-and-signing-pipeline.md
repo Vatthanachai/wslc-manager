@@ -64,5 +64,8 @@ Release sequence
 ## Fixtures
 - None. A sample SignPath artifact configuration and a successful test signing request log are to be added as evidence once available.
 
+## Definition of done
+- This ticket is done only when the checklist in [[qa/definition-of-done]] is met.
+
 ## Out of scope
 - Paid code signing certificates, EV certificates, Microsoft Store distribution, winget or other package manager submission, auto-update of the app itself, non-GitHub CI.

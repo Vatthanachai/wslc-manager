@@ -36,5 +36,8 @@ As a developer, I want to start, stop and restart a container from the UI so tha
 - `obsidians/fixtures/errors/container-stop-missing.txt`, `obsidians/fixtures/errors/container-start-missing.txt`, `obsidians/fixtures/container-list-exited-ports.json` (the exited state to start from).
 - Still unverified [U]: Start/Stop permission-denied cases, restart of an exited container, port already in use at Start, name collision.
 
+## Definition of done
+- This ticket is done only when the checklist in [[qa/definition-of-done]] is met.
+
 ## Out of scope
 - Kill, remove (REQ-007), bulk actions, custom stop timeout setting.

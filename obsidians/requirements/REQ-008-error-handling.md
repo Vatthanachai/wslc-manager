@@ -42,5 +42,8 @@ As a user, I want clear messages and next actions when something is not availabl
 - `obsidians/fixtures/errors/container-stop-missing.txt`, `container-start-missing.txt`, `container-remove-missing.txt`, `container-logs-missing.txt`, `container-stats-missing.txt`, `container-inspect-missing.txt`, `container-list-bad-session.txt`, `session-terminate-missing.txt`, `container-run-missing-image.txt`, `image-pull-missing.txt`, `container-list-bad-format.txt`, `container-list-bad-option.txt`, `unknown-command.txt`, `wslc-version.txt` (each file holds COMMAND, EXIT, STDOUT, STDERR, see `obsidians/fixtures/errors/README.md`).
 - Still to capture [U]: name collision (`run --name` twice), port already in use, remove of a running container without `--force`, `kill`, permission-denied cases, `wslc` missing or WSL too old, session list with 0 or 2+ sessions.
 
+## Definition of done
+- This ticket is done only when the checklist in [[qa/definition-of-done]] is met.
+
 ## Out of scope
 - Crash reporting or telemetry, automatic repair of the engine, translating CLI messages.

@@ -35,5 +35,8 @@ As a user, I want the app to tell me whether WSL and `wslc.exe` are available, w
 - `obsidians/fixtures/wsl-version.utf16.txt` (UTF-16LE), `obsidians/fixtures/errors/wslc-version.txt`. `obsidians/fixtures/wsl-list-verbose.utf16.txt` is available but only needed by the deferred distro discovery.
 - Still unverified [U]: behaviour when `wslc.exe` is missing or WSL is too old (not testable without uninstalling).
 
+## Definition of done
+- This ticket is done only when the checklist in [[qa/definition-of-done]] is met.
+
 ## Out of scope
 - WSL distro discovery (`wsl -l -v`), Docker/Podman detection, starting distros, hiding `docker-desktop` distros (all deferred with Docker), installing or updating WSL (REQ-009).

@@ -54,4 +54,4 @@ Captured: `wsl --version` and `wsl -l -v` (UTF-16LE), `wslc version`, failure fi
 
 ## Ticket conventions
 
-Each ticket lists id, priority (MoSCoW), user story, Given/When/Then criteria, dependencies, connector scope, fixtures, and out-of-scope notes. Evidence labels [V]/[R]/[U] follow `../ba-analysis.md`: [V] means verified on WSL 3.0.5.0, 2026-11-11.
+Each ticket lists id, priority (MoSCoW), user story, Given/When/Then criteria, dependencies, connector scope, fixtures, and out-of-scope notes. Every ticket (REQ-001 onward) also links the QA Definition of Done, `[[qa/definition-of-done]]` (see [[REQ-013-ci-and-qa-baseline]]), and is done only when that checklist is met. A ticket with a user interface links its design note under `obsidians/design/` and its plan under `obsidians/plans/`. Evidence labels [V]/[R]/[U] follow `../ba-analysis.md`: [V] means verified on WSL 3.0.5.0, 2026-11-11.

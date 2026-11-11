@@ -46,5 +46,8 @@ As a user, I want the app to tell me when WSL is not up to date and ask whether 
 - `obsidians/fixtures/wsl-version.utf16.txt` (UTF-16LE). `obsidians/fixtures/README.md` records the baseline 3.0.5.0 and the encoding.
 - A sample GitHub releases API response must be captured before implementing the comparison.
 
+## Definition of done
+- This ticket is done only when the checklist in [[qa/definition-of-done]] is met.
+
 ## Out of scope
 - Updating Windows itself, updating Docker or distros' packages, installing WSL from scratch, rollback, managing WSL pre-release channels.

@@ -41,5 +41,8 @@ As a developer, I want one table of containers across WSLC sessions so that I ca
 - `obsidians/fixtures/errors/container-list-bad-session.txt` (failure case for an unknown session), `container-list-bad-format.txt`.
 - `obsidians/fixtures/container-list.json` (note the fixture has CRLF and no BOM, and is a single line; strip CR in tests and cover BOM synthetically. Add a synthetic empty-output case and a multi-line case in tests).
 
+## Definition of done
+- This ticket is done only when the checklist in [[qa/definition-of-done]] is met.
+
 ## Out of scope
 - Docker/Podman containers and distro filters (deferred), stats columns (REQ-011), inspect detail view, images and volumes lists, sorting persistence.
