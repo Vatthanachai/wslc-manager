@@ -3,7 +3,7 @@ id: REQ-000
 title: "Walking skeleton"
 priority: Must
 connector: wslc
-status: todo
+status: done
 depends_on: []
 tags:
   - requirement
