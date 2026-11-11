@@ -1,0 +1,3 @@
+[test]
+# Guard: `bun test` must fail loudly. The only test command is `bun run test` (Vitest).
+preload = ["./scripts/refuse-bun-test.ts"]

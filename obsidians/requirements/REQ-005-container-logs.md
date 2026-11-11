@@ -32,5 +32,8 @@ As a developer, I want to read and follow a container's logs so that I can debug
 ## Fixtures
 - `obsidians/fixtures/container-logs-tail.txt`, `obsidians/fixtures/container-logs-follow-sample.txt` (strip CR; the files have CRLF line endings).
 
+## Definition of done
+- This ticket is done only when the checklist in [[qa/definition-of-done]] is met.
+
 ## Out of scope
 - Search within logs, download/export, stdout/stderr separation, `--since`/`--until` filters.

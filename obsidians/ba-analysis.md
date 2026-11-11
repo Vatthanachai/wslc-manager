@@ -1,6 +1,6 @@
 # BA Analysis: Rust desktop app on Windows to manage containers on WSL
 
-Date: 2026-11-11 | Status: v6 (Windows 11 only, MIT, SignPath signing plan, error fixtures verified) | Repo state: no application code yet
+Date: 2026-11-11 | Status: v6 (Windows 11 only, MIT, SignPath signing plan, error fixtures verified) | Repo state (2026-11-11): walking skeleton (REQ-000), CI and QA baseline (REQ-013) and bun toolchain (REQ-014) done on `develop`; the app still uses a fake connector, REQ-001 is next
 
 Evidence labels
 - [V] verified. Where the label comes from the fixtures it means "verified on WSL 3.0.5.0 / wslc 3.0.5.0, Windows 10.0.26300, 2026-11-11" (see `obsidians/fixtures/README.md`). Other [V] items were verified in search results I read.

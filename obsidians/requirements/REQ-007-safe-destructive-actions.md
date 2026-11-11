@@ -32,5 +32,8 @@ As an operator, I want a confirmation before removing or killing a container so 
 ## Fixtures
 - None for remove/kill yet (capture before implementing). `obsidians/fixtures/container-list.json` for the list refresh.
 
+## Definition of done
+- This ticket is done only when the checklist in [[qa/definition-of-done]] is met.
+
 ## Out of scope
 - Prune, image/volume removal, undo, bulk delete.

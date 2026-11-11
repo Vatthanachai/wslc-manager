@@ -1,0 +1,44 @@
+name: branch-policy
+
+# Pull requests into main may only come from develop, release/* or hotfix/* (D16).
+# Pull requests into any other branch pass. No path filters, no secrets.
+on:
+  pull_request:
+    # `edited` fires when the base branch of a PR is changed.
+    types: [opened, synchronize, reopened, edited]
+    branches: [develop, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: branch-policy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  branch-policy:
+    # The job name is the status-check context. Do not rename it without updating the main ruleset.
+    name: branch-policy
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check head branch for pull requests into main
+        shell: bash
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          set -eu
+          if [ "$BASE_REF" != "main" ]; then
+            echo "Base branch is not main, nothing to enforce."
+            exit 0
+          fi
+          case "$HEAD_REF" in
+            develop | release/* | hotfix/*)
+              echo "Head branch is allowed for main."
+              ;;
+            *)
+              echo "::error::Pull requests into main must come from develop, release/* or hotfix/*."
+              exit 1
+              ;;
+          esac

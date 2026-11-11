@@ -33,5 +33,8 @@ As a developer, I want the container list to update by itself so that I always s
 ## Fixtures
 - `obsidians/fixtures/events.jsonl`.
 
+## Definition of done
+- This ticket is done only when the checklist in [[qa/definition-of-done]] is met.
+
 ## Out of scope
 - Desktop notifications, event history view, filtering events by type in the UI.

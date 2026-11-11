@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>REQ-001/002/008 low-fidelity mockup (not for the app)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{color-scheme:light dark;
+--bg:#f3f3f3;--surface:#fff;--alt:#f9f9f9;--border:#d1d1d1;--text:#1b1b1b;--muted:#5d5d5d;--accent:#0067c0;--on-accent:#fff;
+--ok:#0f7b0f;--ok-bg:#dff6dd;--warn:#9d5d00;--warn-bg:#fff4ce;--err:#c42b1c;--err-bg:#fde7e9;--info:#0067c0;--info-bg:#e5f1fb;}
+@media (prefers-color-scheme:dark){:root{--bg:#202020;--surface:#2b2b2b;--alt:#262626;--border:#3d3d3d;--text:#fff;--muted:#c5c5c5;--accent:#60cdff;--on-accent:#000;
+--ok:#6ccb5f;--ok-bg:#393d1b;--warn:#fce100;--warn-bg:#433519;--err:#ff99a4;--err-bg:#442726;--info:#60cdff;--info-bg:#25384a;}}
+*{box-sizing:border-box}
+body{margin:0;padding:16px;background:var(--bg);color:var(--text);font:13px/1.4 "Segoe UI Variable","Segoe UI",system-ui,sans-serif}
+h1{font-size:16px;margin:0 0 4px}h2{font-size:14px;margin:24px 0 8px}
+p.note{color:var(--muted);margin:0 0 8px}
+.frame{width:800px;max-width:100%;height:420px;border:1px solid var(--border);background:var(--bg);display:grid;grid-template-rows:40px auto 1fr 24px;position:relative;overflow:hidden}
+.hdr{display:flex;align-items:center;gap:16px;padding:0 12px;background:var(--surface);border-bottom:1px solid var(--border)}
+.brand{font-weight:600}
+.tab{padding:4px 8px;border-bottom:2px solid var(--accent);font-weight:600}
+.sp{flex:1}
+.chip{border:1px solid currentColor;border-radius:4px;padding:3px 8px;background:transparent;font:inherit;cursor:pointer}
+.chip.ok{color:var(--ok)}.chip.bad{color:var(--err)}.chip.warn{color:var(--warn)}
+.chip span.t{color:var(--text)}
+.main{padding:12px;overflow:auto;position:relative}
+.bar{display:flex;gap:0;align-items:center;background:var(--alt);border-top:1px solid var(--border);padding:0 4px;font-size:12px;white-space:nowrap;overflow:hidden}
+.bar span{padding:0 10px;border-right:1px solid var(--border)}
+.bar span:last-child{border:0;overflow:hidden;text-overflow:ellipsis}
+.ic{display:inline-block;width:16px;text-align:center;font-weight:700;margin-right:4px}
+.ok .ic,.ic.ok{color:var(--ok)}.bad .ic,.ic.bad{color:var(--err)}.warn .ic,.ic.warn{color:var(--warn)}
+.banner{display:flex;gap:8px;align-items:flex-start;padding:8px 12px;border-left:3px solid;margin:0}
+.banner.info{border-color:var(--info);background:var(--info-bg)}
+.banner.warning{border-color:var(--warn);background:var(--warn-bg)}
+.banner.error{border-color:var(--err);background:var(--err-bg);margin:0 0 8px}
+.banner .ic{font-size:14px;margin-top:1px}
+.banner.info .ic{color:var(--info)}.banner.warning .ic{color:var(--warn)}.banner.error .ic{color:var(--err)}
+.banner .txt{flex:1}
+.banner b{display:block}
+button{font:inherit;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:4px;height:28px;padding:0 12px}
+button.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+button.ghost{background:transparent;border-color:transparent;text-decoration:underline}
+details{margin-top:6px}summary{cursor:pointer}
+dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:6px 0;font:12px "Cascadia Mono",Consolas,monospace}
+dt{color:var(--muted)}dd{margin:0}
+pre{margin:4px 0;padding:6px;border:1px solid var(--border);background:var(--surface);font:12px "Cascadia Mono",Consolas,monospace;white-space:pre-wrap}
+.badge{font:12px "Cascadia Mono",Consolas,monospace;border:1px solid var(--border);padding:0 6px;border-radius:4px;background:var(--surface)}
+.gate{max-width:560px;margin:24px auto}
+.gate .big{font-size:32px;color:var(--warn)}
+.gate h3{font-size:20px;margin:4px 0 8px}
+code.cmd{display:inline-block;padding:4px 8px;border:1px solid var(--border);background:var(--surface);font:12px "Cascadia Mono",Consolas,monospace}
+.slot{border:1px dashed var(--border);color:var(--muted);padding:24px;text-align:center}
+table{border-collapse:collapse;width:100%;background:var(--surface)}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--border)}
+th{background:var(--alt);font-weight:600}
+.pop{position:absolute;right:8px;top:44px;width:340px;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 24px rgb(0 0 0/.18);padding:12px}
+.pop h4{margin:8px 0 4px;font-size:12px;color:var(--muted);text-transform:uppercase}
+.pop .row{display:flex;justify-content:space-between;padding:1px 0}
+.toast{position:absolute;right:12px;bottom:32px;width:340px;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--err);border-radius:6px;padding:8px 12px;box-shadow:0 8px 24px rgb(0 0 0/.18)}
+.toast b{display:block}
+.loading div{padding:2px 0;color:var(--muted)}
+.loading .cur{color:var(--text)}
+.empty{text-align:center;margin-top:48px}.empty .big{font-size:32px;color:var(--muted)}
+.empty b{display:block;font-size:14px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<h1>Low-fidelity mockup: shell and states (REQ-001, REQ-002, REQ-008)</h1>
+<p class="note">Single file, inline CSS, no script, no external resources. Light and dark follow the OS. Icons are plain characters here (the app uses Segoe Fluent Icons). Not copied into the app. Frames are 800 px wide.</p>
+
+<h2>1. Available, one session</h2>
+<div class="frame">
+  <div class="hdr"><span class="brand">Aiyara Container Dashboard</span><span class="tab">Containers</span><span class="sp"></span><button class="chip ok"><span class="ic">&#10003;</span><span class="t">Available</span></button></div>
+  <div></div>
+  <div class="main"><div class="slot">slot-container-list (REQ-003). Today: the REQ-000 table.</div></div>
+  <div class="bar"><span><b class="ic ok">&#10003;</b>WSLC available</span><span>wslc 3.0.5.0</span><span>WSL 3.0.5.0</span><span>1 session: wslc-cli-&lt;user&gt;</span></div>
+</div>
+
+<h2>2. Untested version (info banner) with the Runtime panel open</h2>
+<div class="frame">
+  <div class="hdr"><span class="brand">Aiyara Container Dashboard</span><span class="tab">Containers</span><span class="sp"></span><button class="chip warn"><span class="ic">&#9650;</span><span class="t">Untested version</span></button></div>
+  <div class="banner info"><span class="ic">i</span><span class="txt"><b>Untested version</b>This app was tested with WSL 3.0.5.0. You have 3.0.6.0. Most things should work, but some data may look different.</span><button class="ghost">Dismiss</button></div>
+  <div class="main"><div class="slot">slot-container-list (REQ-003)</div></div>
+  <div class="bar"><span><b class="ic warn">&#9650;</b>WSLC available</span><span>wslc 3.0.6.0 (untested)</span><span>WSL 3.0.6.0</span><span>2 sessions: default, build</span></div>
+  <div class="pop">
+    <b style="font-size:16px">Runtime</b>
+    <h4>Status</h4><div><b class="ic ok">&#10003;</b>Available, untested version</div>
+    <h4>Versions</h4><div class="row"><span>WSL</span><span>3.0.6.0</span></div><div class="row"><span>wslc</span><span>3.0.6.0 &nbsp;Untested version</span></div>
+    <h4>Sessions (2)</h4><div class="row"><span><span class="badge">default</span> &nbsp;default</span><span>ID 1 &nbsp;PID 40580</span></div><div class="row"><span class="badge">build</span><span>ID 2 &nbsp;PID 41112</span></div>
+    <h4>Capabilities</h4>
+    <div class="row"><span><b class="ic ok">&#10003;</b>List containers</span><span>Assumed</span></div>
+    <div class="row"><span><b class="ic ok">&#10003;</b>Stats snapshot</span><span>Assumed</span></div>
+    <div class="row"><span><b class="ic ok">&#10003;</b>Inspect</span><span>Assumed</span></div>
+    <div class="row"><span><b class="ic ok">&#10003;</b>Live events</span><span>Assumed</span></div>
+    <div class="row"><span><b class="ic ok">&#10003;</b>Follow logs</span><span>Assumed</span></div>
+    <div class="row"><span><b class="ic ok">&#10003;</b>Restart</span><span>Assumed</span></div>
+    <div class="row"><span><b class="ic ok">&#10003;</b>Per-session commands</span><span>Assumed</span></div>
+    <div style="text-align:right;margin-top:8px"><button>Retry detection</button></div>
+  </div>
+</div>
+
+<h2>3. Gate: wslc not found (template for all gates)</h2>
+<div class="frame">
+  <div class="hdr"><span class="brand">Aiyara Container Dashboard</span><span class="tab">Containers</span><span class="sp"></span><button class="chip bad"><span class="ic">&#10005;</span><span class="t">Not available</span></button></div>
+  <div></div>
+  <div class="main"><div class="gate">
+    <div class="big">&#9650;</div>
+    <h3>wslc was not found</h3>
+    <p>WSL is installed, but wslc.exe was not found. Your WSL version may be too old for containers. Update WSL, then select Retry.</p>
+    <p>To update, run this command in a terminal:<br><code class="cmd">wsl --update</code> <button>Copy command</button></p>
+    <p><button class="primary">Retry</button></p>
+    <details><summary>Details</summary><dl><dt>Error type</dt><dd>WslcMissing</dd></dl><pre>(empty)</pre><button>Copy details</button><p class="note">Details can include your Windows user name and file paths. Review them before sharing.</p></details>
+  </div></div>
+  <div class="bar"><span><b class="ic bad">&#10005;</b>WSLC not available</span><span>WSL 3.0.5.0</span><span>wslc not found</span><span>Sessions unavailable</span></div>
+</div>
+
+<h2>4. Partial: one session failed, details open, error toast</h2>
+<div class="frame">
+  <div class="hdr"><span class="brand">Aiyara Container Dashboard</span><span class="tab">Containers</span><span class="sp"></span><button class="chip ok"><span class="ic">&#10003;</span><span class="t">Available</span></button></div>
+  <div></div>
+  <div class="main">
+    <div class="banner error"><span class="ic">&#10005;</span><span class="txt"><span class="badge">build</span> <b style="display:inline">Session build no longer exists</b><br>It may have ended. Refresh the sessions to update the list.
+      <details open><summary>Details</summary><dl><dt>Error type</dt><dd>SessionNotFound</dd><dt>Error code</dt><dd>WSLC_E_SESSION_NOT_FOUND</dd><dt>Exit code</dt><dd>1</dd></dl><pre>Session not found: 'build'
+Error code: WSLC_E_SESSION_NOT_FOUND</pre><button>Copy details</button></details></span><button class="primary">Refresh sessions</button></div>
+    <table><tr><th>Name</th><th>Image</th><th>State</th><th>Status</th><th>Session</th></tr><tr><td>web</td><td>alpine</td><td><b class="ic ok">&#9654;</b>Running</td><td>Up 3 seconds</td><td>default</td></tr></table>
+  </div>
+  <div class="bar"><span><b class="ic ok">&#10003;</b>WSLC available</span><span>wslc 3.0.5.0</span><span>WSL 3.0.5.0</span><span>2 sessions, 1 with errors</span></div>
+  <div class="toast" role="alert"><b><span class="ic bad">&#10005;</span>web no longer exists</b>It was probably removed outside the app. The list is being refreshed.<div style="margin-top:6px"><button>Refresh list</button> <button class="ghost">Dismiss</button></div></div>
+</div>
+
+<h2>5. Loading and empty (no sessions)</h2>
+<div class="frame">
+  <div class="hdr"><span class="brand">Aiyara Container Dashboard</span><span class="tab">Containers</span><span class="sp"></span><button class="chip"><span class="ic">&#8635;</span><span class="t">Checking...</span></button></div>
+  <div></div>
+  <div class="main"><div class="gate loading"><div><b class="ic ok">&#10003;</b>Checking WSL...</div><div class="cur"><b class="ic">&#8635;</b>Checking wslc...</div><div>&nbsp;&nbsp;&nbsp;&nbsp;Looking for sessions...</div><p class="note">Still checking. This can take a few seconds.</p></div></div>
+  <div class="bar"><span>Checking WSL...</span></div>
+</div>
+<div class="frame" style="margin-top:12px">
+  <div class="hdr"><span class="brand">Aiyara Container Dashboard</span><span class="tab">Containers</span><span class="sp"></span><button class="chip ok"><span class="ic">&#10003;</span><span class="t">Available</span></button></div>
+  <div></div>
+  <div class="main"><div class="empty"><div class="big">&#9711;</div><b>No WSLC sessions found</b>Sessions appear after you run a container with wslc. Run one in a terminal, then select Refresh.<p><button>Refresh</button></p></div></div>
+  <div class="bar"><span><b class="ic ok">&#10003;</b>WSLC available</span><span>wslc 3.0.5.0</span><span>WSL 3.0.5.0</span><span>0 sessions</span></div>
+</div>
+</body>
+</html>

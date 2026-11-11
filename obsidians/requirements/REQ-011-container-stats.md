@@ -31,5 +31,8 @@ As an operator, I want to see CPU and memory per container so that I can spot he
 ## Fixtures
 - `obsidians/fixtures/container-stats.json`.
 
+## Definition of done
+- This ticket is done only when the checklist in [[qa/definition-of-done]] is met.
+
 ## Out of scope
 - Graphs and history, alerts, per-process stats, network or disk rates.
