@@ -1,6 +1,6 @@
 ---
 ticket: REQ-014
-status: ready
+status: done
 tags:
   - plan
   - tasks

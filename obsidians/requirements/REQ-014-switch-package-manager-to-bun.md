@@ -3,7 +3,7 @@ id: REQ-014
 title: "Switch the frontend package manager from npm to bun"
 priority: Must
 connector: n/a
-status: todo
+status: done
 depends_on:
   - "[[REQ-013-ci-and-qa-baseline]]"
 tags:
@@ -25,6 +25,8 @@ tags:
 - Bun removes the esbuild install-scripts warning left open in REQ-013. Correction found during implementation (2026-11-11): esbuild is on bun's default-trusted list (`bun pm default-trusted`), so its `postinstall` does run; bun does not run lifecycle scripts of other, untrusted dependencies. `trustedDependencies` stays absent. Vitest does not run without Node (verified), so Node 24, `.nvmrc`, `engines.node` and `setup-node` stay.
 - Historical documents stay as written: [[REQ-013-plan]], [[REQ-013-test-report]], [[REQ-000-test-report]] and the REQ-013 ticket describe npm because that is what was true when they were written. They are evidence, not living docs, and are NOT updated by this ticket. A short note at the top of each is allowed but not required.
 - Living docs that must be updated: `README.md` ("Local checks"), [[qa/test-strategy]], [[qa/definition-of-done]], and [[qa/qa-integration-convention]] if it gives commands.
+- Result record (2026-11-11): the job names `ci-check` (workflow `ci`) and `branch-policy` did NOT change. The new or changed pinned actions are `oven-sh/setup-bun` v2.2.0 and `actions/cache` v6.1.0, both pinned by full commit SHA with the version in a comment and checked against their tags. There is no `trustedDependencies` in `package.json`. Bun version 1.3.14 is written in `package.json` (`packageManager`) and in `ci.yml`.
+- Where the evidence is: the criteria below say "recorded in the PR", but no pull request is opened for a feature branch (pull requests are only opened from `develop` to `main`, D16). The items are therefore recorded in [[REQ-014-plan]], section "T11 results" (CI run, five probes, policy probes, deletion of probe branches and PRs), and in [[REQ-014-test-report]] (bun version, Node decision, grep result, mismatch and broken-assertion checks, mutation checks, window check).
 - Facts marked [U] are unverified.
 
 ## User story
@@ -36,7 +38,7 @@ A. Lockfile and version pinning
 - Given the repository after this ticket, then `bun.lock` exists and is committed, `package-lock.json` is deleted, and no other lockfile exists (`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `bun.lockb`).
 - Given `package.json`, then it has `"packageManager": "bun@1.3.14"` (or the version current when the work is done; the version is recorded in the PR), and CI installs exactly that version. If a `.bun-version` file is also used, it holds the same version (the choice is an open question; one source of truth is preferred).
 - Given the Node pin, then the decision is recorded in the PR: if Vite, Vitest or the Tauri CLI still run on Node, `.nvmrc` and `engines.node` stay, with a stated reason; if everything runs on bun, they are removed with a stated reason. A pin is not removed without a reason.
-- Given `trustedDependencies` in `package.json`, then it is absent or empty unless a dependency demonstrably fails without its install script. If an entry is added, the PR names the package and the failure it prevents. esbuild is not expected to need one [U, confirm].
+- Given `trustedDependencies` in `package.json`, then it is absent or empty unless a dependency demonstrably fails without its install script. If an entry is added, the PR names the package and the failure it prevents. esbuild does not need one: it is on bun's default-trusted list [V, `bun pm default-trusted`; `bun pm untrusted` reports 0]. Result: no `trustedDependencies` exists.
 
 B. Scripts and Tauri hooks
 - Given `package.json`, then the script names `dev`, `build`, `tauri` and `test` are unchanged and `test` is still `vitest run` (Vitest, not bun's own runner).
@@ -94,6 +96,13 @@ E. Documentation and cleanliness
 - REQ-012 (release and signing pipeline, not built yet) must use bun as well, and must not restore any cache into a signed build. Record this in REQ-012 when it is planned, not by editing it now.
 - Documents diverging: if a living doc keeps an npm command, a contributor follows it and creates `package-lock.json` as a second lockfile. Mitigation: the grep criterion and the no-second-lockfile criterion (a CI check for stray lockfiles is a could-have, not required).
 
+### Accepted findings of the test report (Low, none blocks)
+- BUG-003: `bun test` is refused by the `bunfig.toml` preload `scripts/refuse-bun-test.ts`, but bun prints it as "Unhandled error between tests" with "2 fail" (the two test files) and then exits 1. The refusal text is clear and the exit code is non-zero, so it is accepted as is.
+- The bun version is written by hand in two places, `package.json` (`packageManager`) and `ci.yml` (`bun-version`), and nothing checks that they match (a comment in `ci.yml` says so; `setup-bun` is not configured to read `packageManager`). A CI check that compares them is a could-have, not part of this ticket.
+- `bun install --frozen-lockfile` fails for a new dependency but does NOT fail for a range edit that the old lock still satisfies (for example `^5` to `^5.8` with 5.9.3 locked). The criterion ("exits non-zero when `package.json` and `bun.lock` disagree") was checked with a real mismatch only.
+- Definition-of-done wording versus the real commands: `obsidians/qa/definition-of-done.md` line 16 asks for `cargo test --workspace --all-targets` and `cargo test --doc`, while the README and `ci.yml` run `cargo test --workspace`. This does differ (the same gap existed in REQ-013). The tester ran both forms and both pass. This ticket does not edit the DoD; the documentor will align the DoD wording and the README/CI.
+- BUG-002 (a merge conflict in `obsidians/decision-log.md` between this branch and `develop`) is a merge-time item for the owner and is not a text defect of this ticket.
+
 ## Rollback
 - Revert the migration commit (or merge) and restore `package-lock.json`, `.nvmrc`/`engines` if they were removed, the npm hooks in `tauri.conf.json` and the npm steps in `ci.yml`. Because the scripts keep their names and no dependency is added or changed, nothing else needs to change. Re-run `npm ci`, `npm run build` and `npm test` to confirm.
 
@@ -107,9 +116,10 @@ E. Documentation and cleanliness
 - Making the CI jobs required status checks on `main` (the owner step from REQ-013).
 
 ## Open questions
-1. Node pin: keep `.nvmrc` and `engines.node`, or remove them? It depends on whether Vite, Vitest and the Tauri CLI run on bun alone. Default proposal: keep until the clean-runner run shows Node is not used, and then remove with a stated reason.
-2. Version pin source: `packageManager` in `package.json`, a `.bun-version` file, or both? Proposal: `packageManager` only, plus the same value in the setup action (one place to bump, with a comment pointing to it).
-3. `trustedDependencies`: stay empty? Proposal: yes, and add an entry only for a proven failure.
-4. Does `bun run test` run Vitest on Node (default shebang) or on bun (`bun --bun run test`)? Proposal: the default, so behaviour matches the REQ-013 evidence, and test `--bun` separately only if wanted.
-5. How is `bun test` guarded: `bunfig.toml`, or a documented rule only? To be decided by `dev` after checking what bunfig supports.
-6. Should a CI step fail on a stray second lockfile? Proposal: could-have, not part of this ticket.
+All answered (decisions in [[REQ-014-plan]], verified by experiment and in [[REQ-014-test-report]]):
+1. Node pin: KEPT. `.nvmrc` (24), `engines.node` (`>=24 <25`) and `setup-node` in CI stay, because Vitest does not run without Node (with no `node` on `PATH`, `bun run test` fails with an EventTarget error in the Vitest worker; `bun --bun` also fails). Bun still does the install, build and Tauri CLI work.
+2. Version pin source: `packageManager` in `package.json` only (`bun@1.3.14`), plus the same value in `ci.yml` with a comment pointing to it. No `.bun-version` file.
+3. `trustedDependencies`: stays absent (empty). esbuild is on bun's default-trusted list, so it needs no entry.
+4. Runtime for Vitest: Node, through `bun run test` (the `vitest` bin's own shebang). This keeps the REQ-013 evidence valid. `bun --bun run test` was tried for information and also fails, and it is not the CI path.
+5. `bun test` guard: technical guard. `bunfig.toml` has a `[test]` `preload` of `scripts/refuse-bun-test.ts`, which throws a message telling the user to run `bun run test`, so `bun test` exits 1. The README also states that `bun run test` is the only test command. Presentation is noisy (see accepted findings).
+6. Stray second lockfile CI check: not in this ticket (could-have).
