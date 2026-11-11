@@ -1,0 +1,15 @@
+[package]
+name = "aiyara-engine"
+description = "EngineConnector trait, process runner abstraction, fake and WSLC CLI connectors"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+aiyara-domain = { path = "../domain" }
+serde.workspace = true
+serde_json.workspace = true
+async-trait.workspace = true
+
+[dev-dependencies]
+tokio.workspace = true

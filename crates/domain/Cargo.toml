@@ -1,0 +1,10 @@
+[package]
+name = "aiyara-domain"
+description = "Engine-neutral domain model for the Aiyara container dashboard"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+serde.workspace = true
+thiserror.workspace = true
