@@ -1,0 +1,10 @@
+COMMAND: wslc container list --bogus
+EXIT: 1
+--- STDOUT ---
+
+--- STDERR ---
+Option name was not recognized for the current command: '--bogus'
+
+Usage:  wslc container list [options]
+
+Run 'wslc container list --help' for more information.

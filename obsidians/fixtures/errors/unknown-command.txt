@@ -1,0 +1,48 @@
+COMMAND: wslc bogus
+EXIT: 1
+--- STDOUT ---
+
+--- STDERR ---
+Unrecognized command: 'bogus'
+
+Usage:  wslc [global-options] [<command>] [options]
+
+Commands:
+  container  Manage containers.
+  image      Manage images.
+  network    Manage networks.
+  registry   Manage registry credentials.
+  settings   Open the settings file in the default editor.
+  system     System-level commands
+  volume     Manage volumes.
+  attach     Attach to a container.
+  build      Build an image from a Dockerfile.
+  cp         Copy files between a container and the local filesystem.
+  create     Create a container.
+  exec       Execute a command in a running container.
+  events     Monitor container events.
+  export     Export a container's filesystem as a tar archive.
+  images     List images.
+  import     Import an image from a tarball.
+  info       Display system information.
+  inspect    Inspect objects.
+  kill       Kill one or more running containers.
+  list       List containers.
+  load       Load images.
+  login      Log in to a registry.
+  logout     Log out from a registry.
+  logs       View container logs.
+  pull       Pull images.
+  push       Upload an image to a registry.
+  remove     Remove containers.
+  restart    Restart containers.
+  rmi        Remove images.
+  run        Run a container.
+  save       Save images.
+  start      Start a container.
+  stats      Display container resource usage statistics.
+  stop       Stop containers.
+  tag        Tag an image.
+  version    Show version information.
+
+Run 'wslc --help' for more information.

@@ -1,0 +1,8 @@
+COMMAND: wslc --session no-such-session system session terminate
+EXIT: 1
+--- STDOUT ---
+
+--- STDERR ---
+Session not found: 'no-such-session'
+Error code: WSLC_E_SESSION_NOT_FOUND
+If this error was unexpected, please consider searching for existing issues or filing a new issue at https://github.com/microsoft/WSL/issues.

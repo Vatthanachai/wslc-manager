@@ -1,0 +1,3 @@
+[wslc] Found 1 session
+ID        Creator PID   Display Name
+1         40580         wslc-cli-<user>

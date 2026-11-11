@@ -1,0 +1,13 @@
+COMMAND: wslc container list --format xml
+EXIT: 1
+--- STDOUT ---
+
+--- STDERR ---
+Invalid format value: xml is not a recognized format type. Supported format types are: json, table.
+
+Usage:  wslc container list [options]
+
+Related options:
+  --format  Output formatting (json or table) (Default: table)
+
+Run 'wslc container list --help' for more information.
