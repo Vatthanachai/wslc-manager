@@ -35,16 +35,16 @@ Tauri CLI optional platform binary under bun on the runner [U] · bun and `befor
 
 ## Tasks (in order, tick them off; report deviations)
 
-- [ ] T1 Record the baseline before changing anything: `bun --version`, `node -v`, `npm -v`, the 17 test names from `npm test --reporter=verbose` (save the list to a scratch file, not the repo), `git status` clean except other agents' files.
-- [ ] T2 Migrate lockfile: delete `package-lock.json` and `node_modules`, `bun install`, commit `bun.lock`, add `packageManager`, handle LF if needed, note resolved version differences and blocked scripts. (A)
-- [ ] T3 `tauri.conf.json` hooks and `bun test` guard (decision 5). (B)
-- [ ] T4 Local checks from a clean state: `bun install --frozen-lockfile`, `bun run build`, `bun run test`; deliberate mismatch check; broken assertion check; no-test-files check; compare test names with T1. (C)
-- [ ] T5 Mutation checks M1 to M4 under bun, revert, `git diff` empty afterwards. (C)
-- [ ] T6 `bunx tauri build --debug --no-bundle` and the window check with WebView2 remote debugging; kill the app, verify no leftover processes. (B)
-- [ ] T7 Node removal experiment (decision 1): result recorded; keep or remove with reason. (A)
-- [ ] T8 `ci.yml` with `setup-bun` (SHA verified), caching, order of steps, names unchanged. Validate YAML locally. (D)
-- [ ] T9 Docs updates and the grep for `npm`/`npx` in living files; fresh-clone check in a scratch directory (`git clone` the local repo, follow the README only). (E)
-- [ ] T10 Commit in small conventional commits ending with the Co-Authored-By line; do not push.
+- [x] T1 Record the baseline before changing anything: `bun --version`, `node -v`, `npm -v`, the 17 test names from `npm test --reporter=verbose` (save the list to a scratch file, not the repo), `git status` clean except other agents' files.
+- [x] T2 Migrate lockfile: delete `package-lock.json` and `node_modules`, `bun install`, commit `bun.lock`, add `packageManager`, handle LF if needed, note resolved version differences and blocked scripts. (A)
+- [x] T3 `tauri.conf.json` hooks and `bun test` guard (decision 5). (B)
+- [x] T4 Local checks from a clean state: `bun install --frozen-lockfile`, `bun run build`, `bun run test`; deliberate mismatch check; broken assertion check; no-test-files check; compare test names with T1. (C)
+- [x] T5 Mutation checks M1 to M4 under bun, revert, `git diff` empty afterwards. (C)
+- [x] T6 `bunx tauri build --debug --no-bundle` and the window check with WebView2 remote debugging; kill the app, verify no leftover processes. (B)
+- [x] T7 Node removal experiment (decision 1): result recorded; keep or remove with reason. (A)
+- [x] T8 `ci.yml` with `setup-bun` (SHA verified), caching, order of steps, names unchanged. Validate YAML locally. (D)
+- [x] T9 Docs updates and the grep for `npm`/`npx` in living files; fresh-clone check in a scratch directory (`git clone` the local repo, follow the README only). (E)
+- [x] T10 Commit in small conventional commits ending with the Co-Authored-By line; do not push.
 - [ ] T11 (main assistant) push the branch, confirm CI green, run the five probes and the policy probes, delete probe branches/PRs, record in this plan.
 - [ ] T12 (`tester`) verify against the ticket and the QA Definition of Done; report in `obsidians/plans/REQ-014-test-report.md`.
 
