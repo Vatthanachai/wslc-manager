@@ -1,0 +1,15 @@
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
+
+# Obsidian: keep shared config, ignore per-machine state
+/obsidians/.obsidian/workspace*.json
+/obsidians/.obsidian/cache
+/obsidians/.trash/
+
+# Local tooling, not part of the project
+/.claude/
+/.ignore
+/target/
+/node_modules/
+/dist/
+/src-tauri/gen/

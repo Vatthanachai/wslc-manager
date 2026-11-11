@@ -1,0 +1,62 @@
+[
+  {
+    "Config": {
+      "Cmd": [
+        "sh",
+        "-c",
+        "i=0; while true; do echo \"tick $i\"; i=$((i+1)); sleep 1; done"
+      ],
+      "Entrypoint": null,
+      "Env": [
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+      ],
+      "Healthcheck": null,
+      "Image": "alpine:latest",
+      "Labels": {},
+      "StopTimeout": null,
+      "User": "",
+      "WorkingDir": "/"
+    },
+    "Created": "2026-11-11T07:09:43.251894387Z",
+    "HostConfig": {
+      "CapAdd": [],
+      "CapDrop": [],
+      "Memory": 0,
+      "NanoCpus": 0,
+      "NetworkMode": "bridge",
+      "RestartPolicy": {
+        "MaximumRetryCount": 0,
+        "Name": "no"
+      },
+      "Ulimits": []
+    },
+    "Id": "9bf105870a7d42a039d409c73aea6c8dd47cb36b04790141f3c1c3bf76e00eb6",
+    "Image": "sha256:3ea06e4cb95e726ea6c6cc4377570ac4c4050d78710004cbd631ca809daf7e8e",
+    "Labels": {},
+    "Mounts": [],
+    "Name": "/aiyara-spike",
+    "NetworkSettings": {
+      "Networks": {
+        "bridge": {
+          "Aliases": [],
+          "DriverOpts": {},
+          "Gateway": "172.17.0.1",
+          "IPAMConfig": null,
+          "IPAddress": "172.17.0.2",
+          "IPPrefixLen": 16,
+          "Links": [],
+          "MacAddress": "02:42:ac:11:00:02"
+        }
+      }
+    },
+    "Ports": {},
+    "State": {
+      "ExitCode": 0,
+      "FinishedAt": "0001-01-01T00:00:00Z",
+      "Health": null,
+      "Running": true,
+      "StartedAt": "2026-11-11T07:09:43.452067032Z",
+      "Status": "running"
+    }
+  }
+]

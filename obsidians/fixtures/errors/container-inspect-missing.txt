@@ -1,0 +1,7 @@
+COMMAND: wslc container inspect no-such-container
+EXIT: 1
+--- STDOUT ---
+[]
+
+--- STDERR ---
+Container 'no-such-container' not found.

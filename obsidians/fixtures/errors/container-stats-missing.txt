@@ -1,0 +1,8 @@
+COMMAND: wslc container stats --format json no-such-container
+EXIT: 1
+--- STDOUT ---
+
+--- STDERR ---
+
+Error code: WSLC_E_CONTAINER_NOT_FOUND
+If this error was unexpected, please consider searching for existing issues or filing a new issue at https://github.com/microsoft/WSL/issues.

@@ -1,0 +1,8 @@
+{
+  "colorGroups": [
+    { "query": "tag:#must", "color": { "a": 1, "rgb": 14701138 } },
+    { "query": "tag:#should", "color": { "a": 1, "rgb": 5431378 } },
+    { "query": "tag:#decisions", "color": { "a": 1, "rgb": 11645361 } }
+  ],
+  "showOrphans": true
+}

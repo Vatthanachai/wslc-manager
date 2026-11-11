@@ -1,0 +1,8 @@
+COMMAND: wslc image pull docker.io/library/aiyara-no-such-image:nope
+EXIT: 1
+--- STDOUT ---
+
+--- STDERR ---
+pull access denied for aiyara-no-such-image, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+Error code: WSLC_E_IMAGE_NOT_FOUND
+If this error was unexpected, please consider searching for existing issues or filing a new issue at https://github.com/microsoft/WSL/issues.

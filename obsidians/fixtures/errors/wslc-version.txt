@@ -1,0 +1,6 @@
+COMMAND: wslc version
+EXIT: 0
+--- STDOUT ---
+wslc 3.0.5.0
+
+--- STDERR ---
