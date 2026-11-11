@@ -351,3 +351,52 @@ fn container_state_serializes_as_frontend_expects() {
     assert_eq!(v["kind"], "unknown");
     assert_eq!(v["raw"], "paused");
 }
+
+#[test]
+fn bom_fix_does_not_hide_real_errors() {
+    let s = scope();
+    // malformed line after BOM
+    assert!(matches!(
+        parse_container_list("\u{feff}garbage", &s),
+        Err(AppError::ParseError { .. })
+    ));
+    // BOM in the middle of a line, or at the start of a later line
+    assert!(matches!(
+        parse_container_list("{\"ID\":\u{feff}\"a\"}", &s),
+        Err(AppError::ParseError { .. })
+    ));
+    assert!(matches!(
+        parse_container_list("{\"ID\":\"a\"}\n\u{feff}{\"ID\":\"b\"}", &s),
+        Err(AppError::ParseError { .. })
+    ));
+    // double BOM
+    assert!(matches!(
+        parse_container_list("\u{feff}\u{feff}{\"ID\":\"a\"}", &s),
+        Err(AppError::ParseError { .. })
+    ));
+    // BOM before a JSON array is still an error
+    assert!(matches!(
+        parse_container_list("\u{feff}[{\"ID\":\"a\"}]", &s),
+        Err(AppError::ParseError { .. })
+    ));
+}
+
+#[test]
+fn bom_with_blank_lines_is_empty_or_ok() {
+    let s = scope();
+    assert!(parse_container_list("\u{feff}\r\n", &s).unwrap().is_empty());
+    assert!(parse_container_list("\u{feff}\n\n  \r\n", &s)
+        .unwrap()
+        .is_empty());
+    let l = parse_container_list("\u{feff}\r\n\r\n{\"ID\":\"a\"}\r\n", &s).unwrap();
+    assert_eq!(l.len(), 1);
+}
+
+#[test]
+fn bom_parse_error_keeps_original_raw() {
+    let raw = "\u{feff}garbage";
+    match parse_container_list(raw, &scope()).unwrap_err() {
+        AppError::ParseError { raw: r } => assert_eq!(r, raw),
+        other => panic!("unexpected {other:?}"),
+    }
+}
