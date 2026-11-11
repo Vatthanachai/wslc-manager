@@ -76,20 +76,26 @@ Work follows the order in [`obsidians/requirements/README.md`](obsidians/require
 
 ## Local checks
 
-The GitHub Actions workflow `ci` (job `ci-check`, on `windows-latest`) runs exactly these commands, in this order. Run them locally before opening a pull request. Node 24 is pinned in `.nvmrc`.
+Prerequisites on the development machine:
+
+- [bun](https://bun.sh) 1.3.14 (the version in `packageManager` in `package.json`; CI installs the same one).
+- Rust through [rustup](https://rustup.rs); the toolchain itself comes from `rust-toolchain.toml`.
+- Node 24 (`.nvmrc`). Bun installs and builds, but Vitest still runs on Node, so `bun run test` fails without a `node` on `PATH`.
+
+The GitHub Actions workflow `ci` (job `ci-check`, on `windows-latest`) runs exactly these commands, in this order. Run them locally before opening a pull request. If you have an old `node_modules` from another package manager, delete it first.
 
 ```bash
 cargo fmt --check
 cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
-npm ci
-npm run build
-npm test
+bun install --frozen-lockfile
+bun run build
+bun run test
 ```
 
 The Rust toolchain is pinned in `rust-toolchain.toml` (1.99.1 with `rustfmt` and `clippy`), so local runs and CI use the same compiler and lints. The first `cargo` call downloads it through rustup (a few minutes). To upgrade deliberately, edit the version in `rust-toolchain.toml` and fix any new lints in the same pull request.
 
-`npm test` runs Vitest once (jsdom, no watch mode) and needs no Tauri, WebView2, Rust or WSL. The workflow `branch-policy` (job `branch-policy`) only allows pull requests into `main` from `develop`, `release/*` and `hotfix/*`.
+`bun run test` runs Vitest once (jsdom, no watch mode) and needs no Tauri, WebView2, Rust or WSL. It is the only test command: do not run `bun test`, which is bun's own runner and ignores `vitest.config.ts` (a guard in `bunfig.toml` makes it fail with a message). Bun is the only package manager: `bun.lock` is the only lockfile. The workflow `branch-policy` (job `branch-policy`) only allows pull requests into `main` from `develop`, `release/*` and `hotfix/*`.
 
 Test strategy, Definition of Done and the integration-test convention are in [`obsidians/qa/`](obsidians/qa/README.md): [test strategy](obsidians/qa/test-strategy.md), [definition of done](obsidians/qa/definition-of-done.md), [integration convention](obsidians/qa/qa-integration-convention.md).
 
